@@ -11,7 +11,7 @@ class GameCaller:
         if self.__DbgMsg:
             print("GameCaller Inicializado")
 
-    def DbgOut(self, Msg):
+    def DbgOut(self, Msg = "Debug Test"):
         """Método que permite imprimir mensajes de debug a consola cuando se activan estos mensajes"""
         if self.__DbgMsg:
             print(Msg)
@@ -24,7 +24,7 @@ class GameCaller:
                 print("Llamada MT")
             try:
                 GameThead = pygame.threads.Thread(None,gameEP.Go,"Juego",None,None,None)
-                GameThead.setDaemon(False)
+                GameThead.setDaemon(False) #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
                 GameThead.start()
                 GameThead.join()
                 return 0
