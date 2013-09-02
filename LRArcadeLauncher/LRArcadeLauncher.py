@@ -5,13 +5,13 @@ class GameCaller:
     def __init__(self):
         #constructor
         print("GameCaller Inicializado")
-        __DbgMsg = True #Activar o desactivar mensajes de debug
+        self.__DbgMsg = True #Activar o desactivar mensajes de debug
 
     def GameCall(self,gameEP,MTMode = False):
         """Método que realiza la llamada al Entrypoint del juego. gameEP debe ser una instancia de Start o derivado. MTMode es un valor booleano que indica si la llamada se realiza en un nuevo Thread o no (Default: Falso)"""
         if MTMode:
             #Llamada MultiTheaded
-            if __DbgMsg: 
+            if self.__DbgMsg: 
                 print("Llamada MT")
             try:
                 GameThead = pygame.threads.Thread(gameEP.Go).start()
@@ -20,14 +20,14 @@ class GameCaller:
                 return -1
         else:
             #Llamada dentro del mismo Thread
-            if __DbgMsg: 
+            if self.__DbgMsg: 
                 print("Llamada ST")
             ec = 0
             try:
                 ec = gameEP.Go()
                 return ec
             except:
-                if __DbgMsg: 
+                if self.__DbgMsg: 
                     print("Excepción en juego, retornando")
                 return -1
 
