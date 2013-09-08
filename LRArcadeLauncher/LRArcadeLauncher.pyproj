@@ -24,6 +24,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArcadeWatchdog.py" />
     <Compile Include="LRArcadeLauncher.py" />
     <Compile Include="StartBase.py" />
   </ItemGroup>

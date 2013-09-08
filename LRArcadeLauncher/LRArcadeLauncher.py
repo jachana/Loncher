@@ -26,6 +26,7 @@ class GameCaller:
                 GameThead = pygame.threads.Thread(None,gameEP.Go,"Juego",None,None,None)
                 GameThead.setDaemon(False) #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
                 GameThead.start()
+                #Agregar watchdog acá
                 GameThead.join()
                 return 0
             except:
