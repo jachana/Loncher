@@ -38,19 +38,48 @@ class XMLManager():
 
 
             for i in range(10):
-                puntajes = ET.SubElement(puntaje, str(i+1)+'.-')
-                puntajes.set('-','- 0000')
+                puntaje.set(str(i),'- 0000')
 
             self.tree.write('registroArcade.xml')
 
     def agregarPuntuacion(self, nombreJuego, nombre, puntaje):
+        a= self.root.findall(nombreJuego)[0]
+        b= a.find('Puntuaciones')
+        #for punts in b.items():
+        punts = b.items()
+        listaDePuntajes = list()
+        listaDePuntajes.append((nombre, puntaje))
+        for i in range(10):
+            listaDePuntajes.append((str(punts[i][1]).split()[0],str(punts[i][1]).split()[1]))
+
+        for i in range(1, len(listaDePuntajes)): 
+            for j in range(len(listaDePuntajes)-(len(listaDePuntajes)-i)): 
+                if listaDePuntajes[i][1] < listaDePuntajes[j][1]: 
+                    temp = listaDePuntajes[i] 
+                    listaDePuntajes[i] = listaDePuntajes[j] 
+                    listaDePuntajes[j] = temp
+
+        a.remove(b)
+
         
-        for punts in self.root.findall('Puntuaciones'):
-            listaDePuntajes = list()
-            for i in range(len(10)):
-                listaDePuntajes.append((i,str(punts.findall(i + '.-')).split()))
-            listaDePuntajes.sort()
                 
+
+        puntaje = ET.SubElement(a, "Puntuaciones")
+        for i in range(10):
+            puntaje.set(str(i+1) + '.-',str(listaDePuntajes[i][0])+' '+str(listaDePuntajes[i][1]))
+        self.tree.write('registroArcade.xml')
+            
+                
+
+
+
+
+
+
+
+    
+        
+
         
         
 
@@ -58,6 +87,9 @@ def main():
     xml = XMLManager()
     xml.pedirNombres()
     xml.agregarJuego("Macman", "algunlugar")
+    xml.agregarPuntuacion("Macman", "Chiri", 1000)
 
 if __name__ == "__main__":
     main()
+
+
