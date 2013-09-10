@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import multiprocessing
 from StartBase import Start
+import LRArcadeLauncher
+
 class ArcadeWatchdog(object):
     """Clase que modela el módulo anti-hang para los juegos del launcher"""
 
@@ -19,6 +21,7 @@ class ArcadeWatchdog(object):
                 if PrevBeat == self.__HGame.GetPulse():
                     #Juego atorado...
                     #Trabajando con Multiprocessing, hay abort
+                    LRArcadeLauncher.GameCaller.DbgOut("Abortando juego [HANG]")
                     self.__HGThread.terminate()
                     pass
                 else:

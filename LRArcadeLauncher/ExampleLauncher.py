@@ -6,4 +6,7 @@ from GameExample import MiJuego
 def main():
     gc = GameCaller()
     juego = MiJuego()
-    gc.GameCall(juego,False)
+    gc.GameCall(juego,True)
+
+if __name__ == "__main__":
+    main()

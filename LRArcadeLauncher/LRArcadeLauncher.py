@@ -29,20 +29,22 @@ class GameCaller:
             try:
                 #Acá creamos los Threads para el juego y el módulo antihang, los iniciamos y esperamos el join.
                 #@jheysen 9-9-13: Cambiado a Mutiprocessing porque así hay terminate()
+                self.DbgOut("[MTCALL]Creando proceso de juego")
                 GameThead = multiprocessing.Process(None,gameEP.Go,"Juego",None,None)
                 GameThead.daemon = False #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
                 GameThead.start()
+                self.DbgOut("[MTCALL]Proceso iniciado")
                 #Ahora ponemos a correr el antihang
-                self.DbgOut("Creando Antihang")
+                self.DbgOut("[MTCALL]Creando Antihang")
                 WD = ArcadeWatchdog.ArcadeWatchdog()
                 WD.SetHGame(gameEP)
                 WD.SetHGThread(GameThead)
                 WDProc = multiprocessing.Process(None,WD.WDMain,"Antihang",None,None)
                 WDProc.daemon = True #Este si es un daemon
                 WDProc.start()
-                self.DbgOut("Esperando fin del juego")
+                self.DbgOut("[MTCALL]Esperando fin del juego")
                 GameThead.join()
-                self.DbgOut("Juego finalizado correctamente, señalando fin de antihang")
+                self.DbgOut("[MTCALL]Juego finalizado correctamente, señalando fin de antihang")
                 #Una vez que terminó el juego, paramos el Watchdog
                 WD.FlagKill()
                 return 0
@@ -55,10 +57,12 @@ class GameCaller:
                 print("Llamada ST")
             ec = 0
             try:
+                self.DbgOut("[STCALL]Iniciando juego")
                 ec = gameEP.Go()
+                self.DbgOut("[STCALL]Juego retorna normalmente")
                 return ec
             except:
                 if self.__DbgMsg: 
-                    print("Excepción en juego, retornando")
+                    print("[STCALL]Excepción en juego, retornando")
                 return -1
 

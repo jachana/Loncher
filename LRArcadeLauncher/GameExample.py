@@ -3,8 +3,7 @@
 import StartBase
 
 class MiJuego(StartBase.Start):
-    def __init__(self):
-        return super(MiJuego, self).__init__()
+    
     def Go(self):
         #recordamos el WD parte desactivado, así que acá se puede realizar carga de recursos sin miedo
         #Termina carga
