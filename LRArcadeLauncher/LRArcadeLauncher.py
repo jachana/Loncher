@@ -1,4 +1,8 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
 import pygame
+import multiprocessing
+import ArcadeWatchdog
 from StartBase import Start
 
 class GameCaller:
@@ -23,16 +27,30 @@ class GameCaller:
             if self.__DbgMsg: 
                 print("Llamada MT")
             try:
-                GameThead = pygame.threads.Thread(None,gameEP.Go,"Juego",None,None,None)
-                GameThead.setDaemon(False) #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
+                #Acá creamos los Threads para el juego y el módulo antihang, los iniciamos y esperamos el join.
+                #@jheysen 9-9-13: Cambiado a Mutiprocessing porque así hay terminate()
+                GameThead = multiprocessing.Process(None,gameEP.Go,"Juego",None,None)
+                GameThead.daemon = False #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
                 GameThead.start()
-                #Agregar watchdog acá
+                #Ahora ponemos a correr el antihang
+                self.DbgOut("Creando Antihang")
+                WD = ArcadeWatchdog.ArcadeWatchdog()
+                WD.SetHGame(gameEP)
+                WD.SetHGThread(GameThead)
+                WDProc = multiprocessing.Process(None,WD.WDMain,"Antihang",None,None)
+                WDProc.daemon = True #Este si es un daemon
+                WDProc.start()
+                self.DbgOut("Esperando fin del juego")
                 GameThead.join()
+                self.DbgOut("Juego finalizado correctamente, señalando fin de antihang")
+                #Una vez que terminó el juego, paramos el Watchdog
+                WD.FlagKill()
                 return 0
             except:
                 return -1
         else:
             #Llamada dentro del mismo Thread
+            #No hay llamada al módulo antihang porque acá no hay como controlarlo.. así que simplemente esperamos el retorno del método.
             if self.__DbgMsg: 
                 print("Llamada ST")
             ec = 0

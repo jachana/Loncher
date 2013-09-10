@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
 class Start:
     def __init__(self):
         self.__WDMode = False #uso de Watchdog, establece si se debe verificar o no
@@ -5,9 +7,9 @@ class Start:
         pass
     def Go(self):
         try:
-            pass
+            return 0
         except:
-            pass
+            return -1
 
     def GetPulse(self):
         """retorna el valor del pulso"""
