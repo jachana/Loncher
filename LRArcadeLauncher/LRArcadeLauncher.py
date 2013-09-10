@@ -30,7 +30,7 @@ class GameCaller:
                 #Acá creamos los Threads para el juego y el módulo antihang, los iniciamos y esperamos el join.
                 #@jheysen 9-9-13: Cambiado a Mutiprocessing porque así hay terminate()
                 self.DbgOut("[MTCALL]Creando proceso de juego")
-                GameThead = multiprocessing.Process(None,gameEP.Go,"Juego",None,None)
+                GameThead = multiprocessing.Process(None,gameEP.Go,"Juego",(),{})
                 GameThead.daemon = False #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
                 GameThead.start()
                 self.DbgOut("[MTCALL]Proceso iniciado")
@@ -39,9 +39,9 @@ class GameCaller:
                 WD = ArcadeWatchdog.ArcadeWatchdog()
                 WD.SetHGame(gameEP)
                 WD.SetHGThread(GameThead)
-                WDProc = multiprocessing.Process(None,WD.WDMain,"Antihang",None,None)
+                WDProc = multiprocessing.Process(None,WD.WDMain,"Antihang",(),{})
                 WDProc.daemon = True #Este si es un daemon
-                WDProc.start()
+                #WDProc.start()
                 self.DbgOut("[MTCALL]Esperando fin del juego")
                 GameThead.join()
                 self.DbgOut("[MTCALL]Juego finalizado correctamente, señalando fin de antihang")
@@ -49,6 +49,8 @@ class GameCaller:
                 WD.FlagKill()
                 return 0
             except:
+                #pass
+                self.DbgOut("[MTCALL]Excepción no controlada")
                 return -1
         else:
             #Llamada dentro del mismo Thread
