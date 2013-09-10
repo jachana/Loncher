@@ -1,5 +1,8 @@
-import pygame
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
+import multiprocessing
 from StartBase import Start
+
 class ArcadeWatchdog(object):
     """Clase que modela el módulo anti-hang para los juegos del launcher"""
 
@@ -7,22 +10,27 @@ class ArcadeWatchdog(object):
         """Incializa un watchdog, note que debe entregar el Handle a la clase start mediante SetHGame"""
         self.__KillFlag = False #Flag para que el main del WD termine
         self.__HGame = Start() #con esto el intérprete sabe que este parámetro siempre será un start
-        self.__HGThread = pygame.threads.Thread() #Handle del Thread
+        self.__HGThread = multiprocessing.Process() #Handle del Thread (Process)
 
     def WDMain(self):
         """Método principal de Watchdog"""
         PrevBeat = -1
+        #GameCaller.DbgOut("[WD]Antihang iniciado")
         while True:
             if self.__HGame.GetWDMode:
                 if PrevBeat == self.__HGame.GetPulse():
                     #Juego atorado...
-                    #poner alguna forma de matar el Thread, pero oficial no hay...
+                    #Trabajando con Multiprocessing, hay abort
+                    #GameCaller.DbgOut("[WD]Abortando juego [HANG]")
+                    self.__HGThread.terminate()
                     pass
                 else:
+                    #GameCaller.DbgOut("[WD]Continuando")
                     PrevBeat = self.__HGame.GetPulse()
             else:
                 pass
             if self.__KillFlag:
+                #GameCaller.DbgOut("[WD]Finalizando")
                 break
 
 

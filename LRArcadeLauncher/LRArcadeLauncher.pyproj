@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7ad960b5-fd14-4602-bf3c-41a267a3c4a8</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>LRArcadeLauncher.py</StartupFile>
+    <StartupFile>ExampleLauncher.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -25,8 +25,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ArcadeWatchdog.py" />
+    <Compile Include="ExampleLauncher.py" />
+    <Compile Include="GameExample.py" />
     <Compile Include="LRArcadeLauncher.py" />
     <Compile Include="StartBase.py" />
+    <Compile Include="test1.py" />
+    <Compile Include="XmlManager.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\2.7" />

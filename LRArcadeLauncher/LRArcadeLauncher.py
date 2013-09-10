@@ -1,4 +1,8 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
 import pygame
+import multiprocessing
+import ArcadeWatchdog
 from StartBase import Start
 
 class GameCaller:
@@ -23,24 +27,44 @@ class GameCaller:
             if self.__DbgMsg: 
                 print("Llamada MT")
             try:
-                GameThead = pygame.threads.Thread(None,gameEP.Go,"Juego",None,None,None)
-                GameThead.setDaemon(False) #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
+                #Acá creamos los Threads para el juego y el módulo antihang, los iniciamos y esperamos el join.
+                #@jheysen 9-9-13: Cambiado a Mutiprocessing porque así hay terminate()
+                self.DbgOut("[MTCALL]Creando proceso de juego")
+                GameThead = multiprocessing.Process(None,gameEP.Go,"Juego",(),{})
+                GameThead.daemon = False #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
                 GameThead.start()
-                #Agregar watchdog acá
+                self.DbgOut("[MTCALL]Proceso iniciado")
+                #Ahora ponemos a correr el antihang
+                self.DbgOut("[MTCALL]Creando Antihang")
+                WD = ArcadeWatchdog.ArcadeWatchdog()
+                WD.SetHGame(gameEP)
+                WD.SetHGThread(GameThead)
+                WDProc = multiprocessing.Process(None,WD.WDMain,"Antihang",(),{})
+                WDProc.daemon = True #Este si es un daemon
+                #WDProc.start()
+                self.DbgOut("[MTCALL]Esperando fin del juego")
                 GameThead.join()
+                self.DbgOut("[MTCALL]Juego finalizado correctamente, señalando fin de antihang")
+                #Una vez que terminó el juego, paramos el Watchdog
+                WD.FlagKill()
                 return 0
             except:
+                #pass
+                self.DbgOut("[MTCALL]Excepción no controlada")
                 return -1
         else:
             #Llamada dentro del mismo Thread
+            #No hay llamada al módulo antihang porque acá no hay como controlarlo.. así que simplemente esperamos el retorno del método.
             if self.__DbgMsg: 
                 print("Llamada ST")
             ec = 0
             try:
+                self.DbgOut("[STCALL]Iniciando juego")
                 ec = gameEP.Go()
+                self.DbgOut("[STCALL]Juego retorna normalmente")
                 return ec
             except:
                 if self.__DbgMsg: 
-                    print("Excepción en juego, retornando")
+                    print("[STCALL]Excepción en juego, retornando")
                 return -1
 
