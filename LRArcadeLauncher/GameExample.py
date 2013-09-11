@@ -11,5 +11,6 @@ class MiJuego(StartBase.Start):
         #inicia la ejecucion
         self.Heartbeat()
         for i in range(0,100):
+            print("[GAME]Iteracion"+str(i))
             self.Heartbeat() #Para que WD no mate al juego
         return 0

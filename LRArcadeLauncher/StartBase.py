@@ -3,7 +3,7 @@ class Start:
     def __init__(self):
         self.__WDMode = False #uso de Watchdog, establece si se debe verificar o no
         self.__WDPulse = 0 #Uso de Watchdog, contador de ayuda
-        #self.__HBQueue = multiprocessing.Queue() #Comunicacion
+        self.__HBQueue = multiprocessing.Queue() #Comunicacion
         pass
     def Go(self):
         try:
@@ -20,7 +20,7 @@ class Start:
     def Heartbeat(self):
         """Levanta flag de que el juego continua vivo y no se ha quedado parado, es obligacion llamarlo en cada frame"""
         self.SetPulse(self.GetPulse()+1)
-        #self.__HBQueue.put(self.GetPulse())
+        self.__HBQueue.put(self.GetPulse())
     def GetWDMode(self):
         """Permite conocer si el juego indica que debe ser verificado por watchdog o no"""
         return self.__WDMode

@@ -9,7 +9,7 @@ class ArcadeWatchdog(object):
         self.__KillFlag = False #Flag para que el main del WD termine
         self.__HGame = Start() #con esto el interprete sabe que este parametro siempre sera un start
         self.__HGThread = multiprocessing.Process() #Handle del Thread (Process)
-        #self.__GQueue = multiprocessing.Queue() #Cola de comunicacion
+        self.__GQueue = multiprocessing.Queue() #Cola de comunicacion
 
     def WDMain(self):
         """Metodo principal de Watchdog"""

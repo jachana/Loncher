@@ -30,7 +30,7 @@ class GameCaller:
                 self.DbgOut("[MTCALL]Creando proceso de juego")
                 GameThead = multiprocessing.Process(None,gameEP.Go,"Juego",(),{})
                 GameThead.daemon = False #Nos aseguramos que Phyton no puede cerrar si el juego no ha cerrado
-                #cola = multiprocessing.Queue()
+                cola = multiprocessing.Queue()
                 #GameEP.SetQueue(cola)
                 GameThead.start()
                 self.DbgOut("[MTCALL]Proceso iniciado")
