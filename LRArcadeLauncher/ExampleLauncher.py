@@ -1,5 +1,3 @@
-#!/usr/local/bin/python
-# -*- coding: utf-8 -*-
 from LRArcadeLauncher import GameCaller
 from GameExample import MiJuego
 
@@ -9,4 +7,5 @@ def main():
     gc.GameCall(juego,True)
 
 if __name__ == "__main__":
+    print("Prueba de Lanzamiento de juego")
     main()

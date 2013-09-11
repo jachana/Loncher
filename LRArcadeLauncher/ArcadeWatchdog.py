@@ -1,24 +1,23 @@
-#!/usr/local/bin/python
-# -*- coding: utf-8 -*-
 import multiprocessing
 from StartBase import Start
 
 class ArcadeWatchdog(object):
-    """Clase que modela el módulo anti-hang para los juegos del launcher"""
+    """Clase que modela el modulo anti-hang para los juegos del launcher"""
 
     def __init__(self):
         """Incializa un watchdog, note que debe entregar el Handle a la clase start mediante SetHGame"""
         self.__KillFlag = False #Flag para que el main del WD termine
-        self.__HGame = Start() #con esto el intérprete sabe que este parámetro siempre será un start
+        self.__HGame = Start() #con esto el interprete sabe que este parametro siempre sera un start
         self.__HGThread = multiprocessing.Process() #Handle del Thread (Process)
+        #self.__GQueue = multiprocessing.Queue() #Cola de comunicacion
 
     def WDMain(self):
-        """Método principal de Watchdog"""
+        """Metodo principal de Watchdog"""
         PrevBeat = -1
         #GameCaller.DbgOut("[WD]Antihang iniciado")
         while True:
             if self.__HGame.GetWDMode:
-                if PrevBeat == self.__HGame.GetPulse():
+                if PrevBeat == self.__GQueue.get():
                     #Juego atorado...
                     #Trabajando con Multiprocessing, hay abort
                     #GameCaller.DbgOut("[WD]Abortando juego [HANG]")
@@ -26,7 +25,7 @@ class ArcadeWatchdog(object):
                     pass
                 else:
                     #GameCaller.DbgOut("[WD]Continuando")
-                    PrevBeat = self.__HGame.GetPulse()
+                    PrevBeat = self.__GQueue.get()
             else:
                 pass
             if self.__KillFlag:
@@ -44,10 +43,13 @@ class ArcadeWatchdog(object):
         """Obtiene Thread del juego"""
         return self.__HGThread
     def SetHGThread(self,t):
-        """Establece cuál es el therad del juego que cuida"""
+        """Establece cual es el therad del juego que cuida"""
         self.__HGThread = t
     def FlagKill(self):
-        """Indica que el watchdog debe finalizar en su próxima iteración"""
+        """Indica que el watchdog debe finalizar en su proxima iteracion"""
         self.__KillFlag = True
+    def SetGQueue(self,cola):
+        """establece cola de comunicacion con juego"""
+        self.__GQueue = cola
 
 
