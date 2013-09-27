@@ -1,13 +1,12 @@
-#!/usr/local/bin/python
-# -*- coding: utf-8 -*-
 import xml.etree.cElementTree as ET
 
 class XMLManager():
    
     def __init__(self):
+        self.tree = ET.ElementTree()
 
         try:
-            self.tree = ET.parse('registroArcade.xml')
+            self.tree = ET.ElementTree(None,'registroArcade.xml')
             self.root = self.tree.getroot()
             print "intente leer un arbol"
 
@@ -16,6 +15,7 @@ class XMLManager():
             self.tree = ET.ElementTree(self.root)
             self.tree.write('registroArcade.xml')
             print "intente crear un arbol"
+            print Exception.args
             
 
     def pedirNombres(self):
@@ -23,8 +23,8 @@ class XMLManager():
         nombres = list()
 
         try:
-            for nombre in self.root.findall('Nombre'):
-                nombres.append(nombre)
+            for nombre in self.root.findall('Juego'):
+                nombres.append(nombre.get('Nombre'))
         except Exception:
             pass
         return nombres
@@ -33,65 +33,38 @@ class XMLManager():
         nombres = list()
         nombres = self.pedirNombres()
         if nombres.count(nombre) < 1:
-            juegoNuevo = ET.SubElement(self.root,nombre)
+            juegoNuevo = ET.SubElement(self.root,'Juego')
             juegoNuevo.set('Nombre',nombre)
             juegoNuevo.set('Ubicacion', ubicacion)
             puntaje = ET.SubElement(juegoNuevo, "Puntuaciones")
 
 
-            for i in range(10):
-                puntaje.set(str(i),'- 0000')
+            for i in range(11):
+                puntaje.set('p' + str(i),'- 0000')
 
             self.tree.write('registroArcade.xml')
 
     def agregarPuntuacion(self, nombreJuego, nombre, puntaje):
-        a= self.root.findall(nombreJuego)[0]
-        b= a.find('Puntuaciones')
+        a= self.root.findall('Juego')
+        b= [x for x in a if x.get('Nombre') == nombreJuego]
         #for punts in b.items():
-        punts = b.items()
+        c=b[0].find('Puntuaciones')
+        punts = c.items()
         listaDePuntajes = list()
         listaDePuntajes.append((nombre, puntaje))
         for i in range(10):
-            listaDePuntajes.append((str(punts[i][1]).split()[0],str(punts[i][1]).split()[1]))
+            listaDePuntajes.append((str(punts[i][1]).split()[0],int(str(punts[i][1]).split()[1])))
 
-        for i in range(1, len(listaDePuntajes)): 
-            for j in range(len(listaDePuntajes)-(len(listaDePuntajes)-i)): 
-                if listaDePuntajes[i][1] < listaDePuntajes[j][1]: 
-                    temp = listaDePuntajes[i] 
-                    listaDePuntajes[i] = listaDePuntajes[j] 
-                    listaDePuntajes[j] = temp
+        
+        listaDePuntajes.sort(key=lambda tup: tup[1])
+        listaDePuntajes.reverse()
 
-        a.remove(b)
+        b[0].remove(c)
 
         
                 
 
-        puntaje = ET.SubElement(a, "Puntuaciones")
+        puntaje = ET.SubElement(b[0], "Puntuaciones")
         for i in range(10):
-            puntaje.set(str(i+1) + '.-',str(listaDePuntajes[i][0])+' '+str(listaDePuntajes[i][1]))
+            puntaje.set('p' + str(i) + '.-',str(listaDePuntajes[i][0])+' '+str(listaDePuntajes[i][1]))
         self.tree.write('registroArcade.xml')
-            
-                
-
-
-
-
-
-
-
-    
-        
-
-        
-        
-
-def main():
-    xml = XMLManager()
-    xml.pedirNombres()
-    xml.agregarJuego("Macman", "algunlugar")
-    xml.agregarPuntuacion("Macman", "Chiri", 1000)
-
-if __name__ == "__main__":
-    main()
-
-
