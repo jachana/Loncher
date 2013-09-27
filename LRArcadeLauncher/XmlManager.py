@@ -44,7 +44,15 @@ class XMLManager():
 
             self.tree.write('registroArcade.xml')
 
-    
+    def quitaJuego(self, nombre):
+        a= self.root.findall('Juego')
+        b= [x for x in a if x.get('Nombre') == nombre][0]
+
+        self.root.remove(b)
+        self.tree.write('registroArcade.xml')
+
+
+
     def agregarRutaImagen(self, nombreJuego, ruta):
         a = self.root.findall('Juego')
         b= [x for x in a if x.get('Nombre') == nombreJuego]
@@ -75,7 +83,11 @@ class XMLManager():
         
         except Exception:
             return descripcion
-    
+     
+            
+
+
+
     def agregarPuntuacion(self, nombreJuego, nombre, puntaje):
         a= self.root.findall('Juego')
         b= [x for x in a if x.get('Nombre') == nombreJuego]
@@ -97,16 +109,27 @@ class XMLManager():
                 
 
         puntaje = ET.SubElement(b[0], "Puntuaciones")
-        for i in range(10):
+        for i in range(len(listaDePuntajes) -1):
             puntaje.set('p' + str(i) + '.-',str(listaDePuntajes[i][0])+' '+str(listaDePuntajes[i][1]))
         self.tree.write('registroArcade.xml')
+            
+                
+
+
+
+        
         
 
 def main():
     xml = XMLManager()
     xml.pedirNombres()
+    
     xml.agregarJuego("Macman", "algunlugar")
     xml.agregarPuntuacion("Macman", "Chiri", 1000)
+    xml.agregarRutaImagen("Macman", "lala.jpg")
+    xml.getDescripcion("Macman")
+    xml.quitaJuego("Macman")
 
 if __name__ == "__main__":
     main()
+
