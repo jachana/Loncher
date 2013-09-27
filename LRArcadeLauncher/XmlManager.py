@@ -44,6 +44,38 @@ class XMLManager():
 
             self.tree.write('registroArcade.xml')
 
+    
+    def agregarRutaImagen(self, nombreJuego, ruta):
+        a = self.root.findall('Juego')
+        b= [x for x in a if x.get('Nombre') == nombreJuego]
+        b[0].set('RutaImagen', ruta)
+        self.tree.write('registroArcade.xml')
+
+    def agregarRutaVideo(self, nombreJuego, ruta):
+        a = self.root.findall('Juego')
+        b= [x for x in a if x.get('Nombre') == nombreJuego]
+        b[0].set('RutaVideo', ruta)
+        self.tree.write('registroArcade.xml')
+
+    def agregarDescripcion(self, nombreJuego, desc):
+        a = self.root.findall('Juego')
+        b= [x for x in a if x.get('Nombre') == nombreJuego]
+        b[0].set('Descripcion', desc)
+        self.tree.write('registroArcade.xml')
+
+    def getDescripcion(self, nombreJuego):
+        descripcion = "No hay descripcion disponible"
+        a = self.root.findall('Juego')
+        b= [x for x in a if x.get('Nombre') == nombreJuego]
+
+        try:
+            if b[0].get('Descripcion') != None:
+                descripcion = b[0].get('Descripcion')
+            return descripcion
+        
+        except Exception:
+            return descripcion
+    
     def agregarPuntuacion(self, nombreJuego, nombre, puntaje):
         a= self.root.findall('Juego')
         b= [x for x in a if x.get('Nombre') == nombreJuego]
