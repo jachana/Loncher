@@ -68,3 +68,13 @@ class XMLManager():
         for i in range(10):
             puntaje.set('p' + str(i) + '.-',str(listaDePuntajes[i][0])+' '+str(listaDePuntajes[i][1]))
         self.tree.write('registroArcade.xml')
+        
+
+def main():
+    xml = XMLManager()
+    xml.pedirNombres()
+    xml.agregarJuego("Macman", "algunlugar")
+    xml.agregarPuntuacion("Macman", "Chiri", 1000)
+
+if __name__ == "__main__":
+    main()
