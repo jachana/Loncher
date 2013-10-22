@@ -1,6 +1,5 @@
 from LRArcadeLauncher import GameCaller
-from GameExample import MiJuego
-
+from bh.test_pygame import MiJuego
 def main():
     gc = GameCaller()
     juego = MiJuego()
