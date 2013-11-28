@@ -25,7 +25,7 @@ lab.grid(row=0, column = 0)
 listaDeJuegos = Listbox(root)
 listaDeJuegos.pack()
 
-xml = XMLManager.XMLManager()
+xml = XmlManager.XMLManager()
 listaDeJuegos.config(font = ("Lucida Console", "20"), background = "black", activestyle = 'none', foreground = 'yellow', height = '27')
 listaDeNombres = xml.pedirNombres()
 
