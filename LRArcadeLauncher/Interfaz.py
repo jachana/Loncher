@@ -1,5 +1,5 @@
 from Tkinter import *
-import XMLManager
+import XmlManager
 from PIL import ImageTk, Image
 
 
