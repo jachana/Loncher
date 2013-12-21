@@ -9,5 +9,5 @@ def runparts(path):
         loaded = imp.load_source("Loaded",files)
 		try:
 			eval("loaded.exec()")
-		except:
+		except Exception:
 			pass
