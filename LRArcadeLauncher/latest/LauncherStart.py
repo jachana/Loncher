@@ -10,4 +10,4 @@ def LauncherMain():
 	#TODO: Lanzar interfaz
 
 if __name__== "__main__":
-	LauncherMain():
+	LauncherMain()

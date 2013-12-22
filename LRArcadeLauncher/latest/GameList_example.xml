@@ -1,4 +1,4 @@
-<ArcadeRegistryStandard ver="1.0" type="GameList"/>
+<?xml version="1.0"?>
 <GameList>
 	<Game path="bh/GameInfo_example.xml"/>
 </GameList>
