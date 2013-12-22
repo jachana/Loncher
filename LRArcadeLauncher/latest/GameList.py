@@ -41,6 +41,25 @@ class GameList:
         """Entrega la lista de objetos GameInfo"""
         return self._list
 
+    def removeByCode(self,code):
+        """Remueve un juego dado su codigo del arbol"""
+        root = self._tree.getroot()
+        for game in root.findall('Game'):
+            if GI.GameInfo(game.get('path')).getCode() == code:
+                root.remove(game)
+                self._list.remove(game)
+                
+    def saveToXml(self,path):
+        """Explicitamente guarda la estructura de arbol actual en un .xml"""
+        self._tree.write(path)
+
+    def addGame(self,path):
+        """Agrega una entrada al registro"""
+        root = self._tree.getroot()
+        nuevo = ET.SubElement(root,'Game')
+        nuevo.set('path',path)
+        
+
 if __name__ == "__main__":
     gl = GameList('GameList_example.xml')
     print(gl)
