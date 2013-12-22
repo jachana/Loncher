@@ -1,11 +1,12 @@
 #Script de inicio del Launcher
 import tools
+import GameList as GL
 def LauncherMain():
 	#Comenzamos el inicio de las cosas
-	#Primero obtenemos la lista de juegos
-	#TODO: Obtener lista
-	#Ahora ejecutamos scripts de extensiones (si, código arbitrario)
+        #Ejecutamos scripts de extensiones (si, codigo arbitrario)
 	tools.runparts("./launcherinit.d/")
+	#Obtenemos la lista de juegos
+	lista = GL.GameList('GameList_example.xml')
 	#Finalizamos con lanzar la interfaz
 	#TODO: Lanzar interfaz
 

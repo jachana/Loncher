@@ -17,7 +17,10 @@ class GameList:
         """Carga una lista desde el path proporcionado"""
         self._tree = ET.ElementTree()
         self._games = []
-        self._LoadList(ListPath)
+        try:
+            self._LoadList(ListPath)
+        except Exception:
+            pass
         
     def _LoadList(self,ListPath):
         """Metodo que realiza la carga efectiva del archivo"""
@@ -33,6 +36,10 @@ class GameList:
             buf += str(game)+"\n"
         buf +="---END---"
         return buf
+
+    def getList(self):
+        """Entrega la lista de objetos GameInfo"""
+        return self._list
 
 if __name__ == "__main__":
     gl = GameList('GameList_example.xml')
