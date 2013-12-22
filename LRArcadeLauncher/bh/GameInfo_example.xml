@@ -2,7 +2,7 @@
 <Game>
 	<Title>Aracde Game Test</Title>
 	<Code>AGT</Code>
-	<Version>1.0.0</Version>
+	<Version>100</Version>
 	<Date>21-12-2013</Date>
 	<Description>Juego de prueba para el Launcher del Arcade</Description>
 	<WebUpdate enable="true" repo="ftp://arcade.ing.puc.cl/games/AGT/release/latest/UpdateInfo.xml"/>
