@@ -1,11 +1,11 @@
-#Clase que modela la información que expone un juego, se carga desde un GameInfo.xml
+#Clase que modela la informacion que expone un juego, se carga desde un GameInfo.xml
 import xml.etree.cElementTree as ET
 import os
 
 class GameInfo:
 	def __init__(self,XmlPath):
 		"""Crea un objeto que represneta la info de un juego"""
-		self.tree = ET.ElementTree()
+		self._tree = ET.ElementTree()
 		self._gamename = "Juego"
 		self._gamecode = "G0"
 		self._version = 001
@@ -17,14 +17,18 @@ class GameInfo:
 		self._services = []
 		self._adddata = []
 		self._screenshots = []
-		self.loadXml(XmlPath)
+		if XmlPath != '':
+			self.loadXml(XmlPath)
+		
+	def __str__(self):
+		return str(self._gamename)+"("+str(self._gamecode)+") ver "+str(self._version)+"("+str(self._builddate)+") on "+str(self._path)+"("+str(self._classname)+") by "+str(self._authors)+" uses "+str(self._services)
 		
 	def loadXml(self,XmlPath):
-		"""Carga la información desde un archivo"""
+		"""Carga la informacion desde un archivo"""
 		#TODO: Cragar datos desde el Xml
-		self.tree = ET.ElementTree(None,XmlPath)
-		root = tree.getroot()
-		#Leemos datos básicos desde el Xml
+		self._tree = ET.ElementTree(None,XmlPath)
+		root = self._tree.getroot()
+		#Leemos datos basicos desde el Xml
 		for name in root.findall('Title'):
 			self._gamename = name.text
 		for code in root.findall('Code'):
@@ -41,15 +45,15 @@ class GameInfo:
 		#Cargamos las rutas de las screenshots
 		for ss_sec in root.findall('Screenshots'):
 			for ss in ss_sec.findall('Screenshot'):
-				self._sceenshots.append(ss.get('src'))
-		#Ahora cargamos la información de los servicios (Critico)
+				self._screenshots.append(ss.get('src'))
+		#Ahora cargamos la informacion de los servicios (Critico)
 		for services in root.findall('Services'):
 			for service in services.findall('Service'):
 				self._services.append( (service.get('name'),service.attrib) )
 		#Finalmente cargamos los autores y la data adicional
 		for authors in root.findall('Authors'):
 			for author in authors.findall('Author'):
-				self._authors.append(author.get('Name'))
+				self._authors.append(author.get('name'))
 		for adddata in root.findall('AdditionalData'):
 			for data in adddata:
 				self._adddata.append( (data.tag,data.attrib,data.text) )
