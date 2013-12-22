@@ -1,4 +1,4 @@
-<ArcadeRegistryStandard ver="1.0" type="GameInfo"/>
+<?xml version="1.0"?>
 <Game>
 	<Title>Aracde Game Test</Title>
 	<Code>AGT</Code>
@@ -14,6 +14,9 @@
 		<Author name="Julio Chaná"/>
 		<Author name="Ricardo Aldana"/>
 	</Authors>
+	<Screenshots>
+		<Screenshot src="./res/ss/shot1.png"/>
+	</Screenshots>
 	<Services>
 		<Service name="HighscoreService" max="10" storage="global"/>
 		<Service name="SaveGameService" storage="removable" path="default"/>

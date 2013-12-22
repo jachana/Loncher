@@ -16,12 +16,43 @@ class GameInfo:
 		self._authors = []
 		self._services = []
 		self._adddata = []
+		self._screenshots = []
 		self.loadXml(XmlPath)
 		
 	def loadXml(self,XmlPath):
 		"""Carga la información desde un archivo"""
 		#TODO: Cragar datos desde el Xml
-		pass
+		self.tree = ET.ElementTree(None,XmlPath)
+		root = tree.getroot()
+		#Leemos datos básicos desde el Xml
+		for name in root.findall('Title'):
+			self._gamename = name.text
+		for code in root.findall('Code'):
+			self._gamecode = code.text
+		for ver in root.findall('Version'):	
+			self._version = ver.text
+		for des in root.findall('Description'):
+			self._description = des.text
+		for cl in root.findall('MainClass'):
+			self._classname = cl.get('name')
+			self._path = cl.get('file')
+		for dat in root.findall('Date'):
+			self._builddate = dat.text
+		#Cargamos las rutas de las screenshots
+		for ss_sec in root.findall('Screenshots'):
+			for ss in ss_sec.findall('Screenshot'):
+				self._sceenshots.append(ss.get('src'))
+		#Ahora cargamos la información de los servicios (Critico)
+		for services in root.findall('Services'):
+			for service in services.findall('Service'):
+				self._services.append( (service.get('name'),service.attrib) )
+		#Finalmente cargamos los autores y la data adicional
+		for authors in root.findall('Authors'):
+			for author in authors.findall('Author'):
+				self._authors.append(author.get('Name'))
+		for adddata in root.findall('AdditionalData'):
+			for data in adddata:
+				self._adddata.append( (data.tag,data.attrib,data.text) )
 		
 	def getGameName(self):
 		return self._gamename
