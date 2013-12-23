@@ -46,10 +46,12 @@ class GameList:
         root = self._tree.getroot()
         for game in root.findall('Game'):
             if GI.GameInfo(game.get('path')).getCode() == code:
-                root.remove(game)
+		root.remove(game)
                 for r in self._games:
-					if r.getCode() == code:
-						self._games.remove(r)
+                    if r.getCode() == code:
+                        #Quiza quieran sacar este print
+                        print("Removed "+str(r))
+                        self._games.remove(r)
                 
     def saveToXml(self,path):
         """Explicitamente guarda la estructura de arbol actual en un .xml"""

@@ -14,6 +14,9 @@ if args.list:
 if args.install:
 	games.addGame(args.install)
 	games.saveToXml(xmlPath)
+	print("Added "+args.install+" to the registry")
 if args.uninstall:
+	print("Removing "+args.uninstall+"...")
 	games.removeByCode(args.uninstall)
 	games.saveToXml(xmlPath)
+	print("Done.")
