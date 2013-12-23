@@ -47,7 +47,9 @@ class GameList:
         for game in root.findall('Game'):
             if GI.GameInfo(game.get('path')).getCode() == code:
                 root.remove(game)
-                self._list.remove(game)
+                for r in self._games:
+					if r.getCode() == code:
+						self._games.remove(r)
                 
     def saveToXml(self,path):
         """Explicitamente guarda la estructura de arbol actual en un .xml"""

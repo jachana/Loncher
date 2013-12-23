@@ -21,7 +21,7 @@ class GameInfo:
 			self.loadXml(XmlPath)
 		
 	def __str__(self):
-		return str(self._gamename)+"("+str(self._gamecode)+") ver "+str(self._version)+"("+str(self._builddate)+") on "+str(self._path)+"("+str(self._classname)+") by "+str(self._authors)+" uses "+str(self._services)
+		return str(self._gamename)+" ("+str(self._gamecode)+") ver "+str(self._version)+" ("+str(self._builddate)+") on "+str(self._path)+" ("+str(self._classname)+")"
 		
 	def loadXml(self,XmlPath):
 		"""Carga la informacion desde un archivo"""
@@ -60,6 +60,9 @@ class GameInfo:
 		
 	def getGameName(self):
 		return self._gamename
+		
+	def getCode(self):
+		return self._gamecode
 		
 	def getVersion(self):
 		return self._version
