@@ -18,4 +18,4 @@ def discover(path):
         return servlist
 								
 if __name__ == "__main__":
-        print(discover("./services/"))
+        print( discover("./services/") )

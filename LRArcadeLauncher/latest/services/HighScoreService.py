@@ -23,7 +23,7 @@ class HighScoreServiceProvider:
 		self._storage = storage
 		
 	def register(self,score,name):
-		"""Registra un score score para el jugador name, si está en el top max"""
+		"""Registra un score score para el jugador name, si esta en el top max"""
 		pass
 		
 	def getScores(self):
