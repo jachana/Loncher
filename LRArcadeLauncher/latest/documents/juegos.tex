@@ -2,7 +2,7 @@
 \usepackage{fancyhdr}
 \usepackage[utf8]{inputenc}
 \pagestyle{fancy}
-\lhead{Arcade La Resistencia\\Documento especificación de juegos\\Versión 1.0 - Diciembre de 2013}
+\lhead{Arcade La Resistencia\\Documento especificación de juegos\\Versión 1.0 - \today \\}
 \begin{document}
 
 \title{Especificación de juegos Arcade 1.0}
@@ -15,6 +15,7 @@
 \newpage
 
 \section{Introducción}
+
 El presente documento tiene como objetvo instruir a los desarrolladores de videojuegos sobre los estándares que deben cumplir para ser compatibles con el Launcher del Aracde
 
 \section{Estándar}
@@ -37,7 +38,24 @@ Otro aspecto a considerar es la lista contenida entre \textless Screenshots\text
 La lista denotada por \textless Services\textgreater y \textless /Services\textgreater  indica los servicios que solicita el juego al Launcher, cada servicio se solicita mediante \textless Service name="..." .../\textgreater  donde name es el nombre del servicio solicitado, además se deben incluir los parámetros requeridos por el servicio según su propio estándar.\\
 Adicionalmente se puede crear una lista denotada por \textless AdditionalData\textgreater  y \textless /AdditionalData\textgreater  para incluir datos adicionales. No hay especificaciones sobre los contenidos de esta lista.\\ 
 
-\subsection{Instalación de juegos}
+\section{Servicios}
+
+El Launcher ofrece a los juegos diversos servicios que pueden ser instalados. Estos son agegados a la instalación base y siguiendo la documentación de servicios, los desarrolladores pueden incluir los suyos propios.\\
+En esta sección se abordará la interfaz común de acceso a servicios.
+
+\subsection{Clase ArcadeServiceInterface}
+
+La clase {\em ArcadeServiceInterface} provee el acceso a los servicios del Arcade que son declarados en el .xml de información del juego. Los servicios contenidos en él se encuentran ya inicializados para el juego, se provee dos formas de acceder a los servicios.
+
+\subsubsection{Método getServices()}
+
+Este método devuelve un diccionario con las clases que representan cada servicio, donde las llaves son los nombres de estos. Si faltara algún servicio, signiica que este no se registró correctamente en la inicialización o que no se encuentra instalado, pero para todos los efectos no está disponible.
+
+\subsubsection{Método getService(servicio)}
+
+Este método recibe como string el nombre del servicio y retorna  el objeto que representa a este servicio si se encuentra disponible o None en caso contrario.
+
+\section{Instalación de juegos}
 
 En una distribución normal del Launcher, los juegos pueden ser instalados siguiendo los siguientes pasos:\\
 \begin{enumerate}
@@ -47,6 +65,5 @@ En una distribución normal del Launcher, los juegos pueden ser instalados sigui
 	\item Verificar con {\em python game\_install.py -l}
 \end{enumerate}
 Puede desinstalar\footnote{No borra los archivos, solo quita el juego del registro del arcade} un juego con {\em python game\_install.py -u CODIGO} donde CODIGO es el codigo del juego que desea desinstalar. Puede ser visto ejecutando antes {\em python game\_install.py -l}
-
 
 \end{document}
