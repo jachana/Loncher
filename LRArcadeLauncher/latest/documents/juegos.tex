@@ -1,0 +1,52 @@
+\documentclass[language=spanish]{article}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\pagestyle{fancy}
+\lhead{Arcade La Resistencia\\Documento especificación de juegos\\Versión 1.0 - Diciembre de 2013}
+\begin{document}
+
+\title{Especificación de juegos Arcade 1.0}
+\author{Jurgen Heysen}
+\date{\today}
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+El presente documento tiene como objetvo instruir a los desarrolladores de videojuegos sobre los estándares que deben cumplir para ser compatibles con el Launcher del Aracde
+
+\section{Estándar}
+
+\subsection{Código}
+
+Los juegos deben exponer un archivo .py con una clase que contenga el método {\em Go}, que debe recibir como parámetro un objeto del tipo {\em ArcadeServiceInterface} (ArcadeServiceInterface.py), este objeto será tratado mas adelante y es una interfaz a los servicios solicitados por el juego.
+
+\subsection{XML}
+
+Los juegos deben exponer un archivo .xml con información relevante sobre ellos.
+El nodo principal debe llamarse \textless Game\textgreater y opcionalmente de argumento puede llevar un string llamado version con el valor "1.0".
+El Titulo del juego va entre las etiquetas \textless Title\textgreater y \textless /Title\textgreater. Es importante agregar un código corto único para el juego entre las etiquetas \textless Code\textgreater y \textless /Code\textgreater.\\
+Las etiquetas \textless Description\textgreater y \textless /Description\textgreater encierran la descripción del juego.\\
+La versión se incluye entre \textless Version\textgreater y \textless /Version\textgreater , se recomienda que sea un entero\\
+La fecha de compilación puede ser añadida con \textless Date\textgreater  y \textless /Date\textgreater \\
+La etiqueta \textless MainClass..\textgreater  es obligatoria y debe llevar como argumentos name con el nombre de la clase que contiene el método Go(...) y path con la ruta relativa a este archivo, extensión incluida.\\
+Se puede incluir la lista de autores mediante una sección \textless Authors\textgreater  finalizada con \textless /Authors\textgreater . Cada autor se individualiza \textless Author name="..."/\textgreater , dónde name es el nombre del autor.\\
+Otro aspecto a considerar es la lista contenida entre \textless Screenshots\textgreater  y \textless /Screenshots\textgreater  para incluir las screenshots del juego que se mostraran en el Launcher. cada una se indica con la etiqueta \textless Screenshot src="..."/\textgreater  donde src es el path a la screenshot.\\
+La lista denotada por \textless Services\textgreater y \textless /Services\textgreater  indica los servicios que solicita el juego al Launcher, cada servicio se solicita mediante \textless Service name="..." .../\textgreater  donde name es el nombre del servicio solicitado, además se deben incluir los parámetros requeridos por el servicio según su propio estándar.\\
+Adicionalmente se puede crear una lista denotada por \textless AdditionalData\textgreater  y \textless /AdditionalData\textgreater  para incluir datos adicionales. No hay especificaciones sobre los contenidos de esta lista.\\ 
+
+\subsection{Instalación de juegos}
+
+En una distribución normal del Launcher, los juegos pueden ser instalados siguiendo los siguientes pasos:\\
+\begin{enumerate}
+	\item Descomprimir los contenidos del juego en una carpeta de elección.
+	\item Navegar a carpeta del Launcher.
+	\item En consola de comandos, ejecutar {\em python game\_install.py -i path\_a\_xml} \footnote{Ajustar a python 2.7 si no fuera el caso}
+	\item Verificar con {\em python game\_install.py -l}
+\end{enumerate}
+Puede desinstalar\footnote{No borra los archivos, solo quita el juego del registro del arcade} un juego con {\em python game\_install.py -u CODIGO} donde CODIGO es el codigo del juego que desea desinstalar. Puede ser visto ejecutando antes {\em python game\_install.py -l}
+
+
+\end{document}
