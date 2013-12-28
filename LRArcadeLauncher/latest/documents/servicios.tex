@@ -21,31 +21,31 @@ Un servicio del Arcade es una pieza de software que contiene una funcionalidad e
 
 \section{Modelo de funcionamiento}
 
-\paragraph{Los servicios son registrados por el Launcher en el momento de inicio de ejecución. Estos se registran como proveedores de cierto servicio y entregan la información relevante para otorgar el servicio, esperando que algún juego lo requiera.}
-\paragraph{Cuando un juego que requiera el servicio sea lanzado, se instanciará el servicio para que el juego lo consuma y esta instancia se desechará al cerrar el juego. La instancia se entrega al juego mediante un objeto ArcadeServicesInterface}
+Los servicios son registrados por el Launcher en el momento de inicio de ejecución. Estos se registran como proveedores de cierto servicio y entregan la información relevante para otorgar el servicio, esperando que algún juego lo requiera.\\
+Cuando un juego que requiera el servicio sea lanzado, se instanciará el servicio para que el juego lo consuma y esta instancia se desechará al cerrar el juego. La instancia se entrega al juego mediante un objeto ArcadeServicesInterface
 
 \section{Requerimientos}
 
 \subsection{Estructura del software}
 
-\paragraph{El estándar de servicios exije que cada proveedor exponga un script en la carpeta {\em services} del Launcher. Este script debe contener la lógica que permita instanciar y registrar el servicio y se lee al momento de lanzar el Launcher. Se recomienda, aunque no es necesario, que el resto del código del servicio en caso de ser complejo sea puesto en una subcarpeta.}
-\paragraph{El servicio en si debe ser entregado como una clase que defina su interfaz con los juegos. En caso de consistir de más de una clase, puede utilizarse una clase fachada para entregar a los juegos.}
+El estándar de servicios exije que cada proveedor exponga un script en la carpeta {\em services} del Launcher. Este script debe contener la lógica que permita instanciar y registrar el servicio y se lee al momento de lanzar el Launcher. Se recomienda, aunque no es necesario, que el resto del código del servicio en caso de ser complejo sea puesto en una subcarpeta.\\
+El servicio en si debe ser entregado como una clase que defina su interfaz con los juegos. En caso de consistir de más de una clase, puede utilizarse una clase fachada para entregar a los juegos.
 
 \subsection{Métodos requeridos}
 
 \subsubsection{register()}
 
-\paragraph{Este método se ejecuta al inicializar el Launcher cuando éste escanea y registra los servicios presentes, debe devolver el nombre del servicio y una referencia a un método factory que permita instanciar el servicio. No recibe parámetros.}
+Este método se ejecuta al inicializar el Launcher cuando éste escanea y registra los servicios presentes, debe devolver el nombre del servicio y una referencia a un método factory que permita instanciar el servicio. No recibe parámetros.
 
 \subsubsection{factory(....)}
 
-\paragraph{Este método se ejecuta cada vez que se debe instanciar el servicio, recibe como argumentos un string con el código del juego y un diccionario con los argumentos que declara el juego para inicializar el servicio en su xml, donde las llaves son el nombre del parámetro y como valor está el valor declarado. Debe retornar una instancia de la clase que representa el servicio.}
-\paragraph{El orden de paso de los argumentos es primero el diccionario y luego el código. En el diccionario los elementos parecen ser todos strings, pero debido a posibles cambios en las librerías base, se recomienda siempre asegurar que los tipos sean lo que se espera mediante {\em casting}. Además, no se puede asegurar que todos los parámetros requeridos se encuentren declarados en el xml, por lo que se recomienda tener ello en mente y añadir las precauciones necesarias en la factory y/o en la documentación.}
+Este método se ejecuta cada vez que se debe instanciar el servicio, recibe como argumentos un string con el código del juego y un diccionario con los argumentos que declara el juego para inicializar el servicio en su xml, donde las llaves son el nombre del parámetro y como valor está el valor declarado. Debe retornar una instancia de la clase que representa el servicio.
+El orden de paso de los argumentos es primero el diccionario y luego el código. En el diccionario los elementos parecen ser todos strings, pero debido a posibles cambios en las librerías base, se recomienda siempre asegurar que los tipos sean lo que se espera mediante {\em casting}. Además, no se puede asegurar que todos los parámetros requeridos se encuentren declarados en el xml, por lo que se recomienda tener ello en mente y añadir las precauciones necesarias en la factory y/o en la documentación.
 
 \section{Instalación de servicios}
 
-\paragraph{Los servicios no requieren de una instalación especial, basta con dejar el script mencionado por esta especificación en la carpeta {\em services} y será descubierto por el Launcher en la etapa de inicialización, antes de ejecutar {\em launcherinit.d}}
-\paragraph{Nada impide que deje código que se ejecute adicionalmente al momento de descubrimiento del servicio, pero no se aconseja esta práctica pues podría provocar incompatibilidades en el Launcher que redunden en la inestabilidad del sistema.}
-\paragraph{Para la desinstalación de servicios, basta con borrar sus archivos o al menos el script que realiza el registro.}
+Los servicios no requieren de una instalación especial, basta con dejar el script mencionado por esta especificación en la carpeta {\em services} y será descubierto por el Launcher en la etapa de inicialización, antes de ejecutar {\em launcherinit.d}
+Nada impide que deje código que se ejecute adicionalmente al momento de descubrimiento del servicio, pero no se aconseja esta práctica pues podría provocar incompatibilidades en el Launcher que redunden en la inestabilidad del sistema.
+Para la desinstalación de servicios, basta con borrar sus archivos o al menos el script que realiza el registro.
 
 \end{document}
