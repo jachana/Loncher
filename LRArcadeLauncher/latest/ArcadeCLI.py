@@ -38,9 +38,6 @@ class ArcadeCLI:
             if lbuf == "list" or lbuf == "l":
                 self.listmsg()
             if "run" in lbuf or "r" in lbuf:
-                try:
-                    self.runmsg(buf.split(" ")[1])
-                except Exception:
-                    print("[CRITICAL] Exacption when trying to parse arg")
+                self.runmsg(buf.split(" ")[1])
 
     

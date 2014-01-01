@@ -16,6 +16,7 @@ def LauncherMain():
 	tools.runparts("./launcherinit.d/")
 	#Obtenemos la lista de juegos
 	lista = GL.GameList(AC.gameList)
+	print(lista) #debug
 	#Finalizamos con lanzar la interfaz
 	#Primero inicializamos el backend
 	fac = ABF.ArcadeBackendFacade(lista,services)

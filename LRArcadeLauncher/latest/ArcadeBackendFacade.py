@@ -2,6 +2,7 @@ import ReflectionLoader as RL
 import GameList
 import GameInfo
 import LauncherServiceInterface as LSI
+import os
 #Esto hace el link logico con el resto del backend del Launcher, asi la UI puede ser mas tonta
 
 class ArcadeBackendFacade:
@@ -13,7 +14,7 @@ class ArcadeBackendFacade:
 		"""Dado un juego seleccionado, solicita su entrada en ejecucion"""
 		game = None
 		gameServiceList = None
-		for g in self._games:
+		for g in self._games.getList():
 			if code == g.getCode():
 				game = g
 				gameServiceList = g.getServices()
@@ -22,7 +23,8 @@ class ArcadeBackendFacade:
 			return #interrumpimos el lanzamiento
 		interface = LSI.LauncherServiceInterface(code,gameServiceList,self._services)
 		#Ahora que tenemos la info, procedemos al lanzamiento
-		RL.LaunchGameFromFileMT(g.getPath,g.getClassName,code,interface)
+		print("Path: "+str(os.getcwd()))
+		RL.LaunchGameFromFileMT(g.getPath(),g.getClassName(),code,interface)
 
 	def getGameList(self):
 		return self._games

@@ -14,7 +14,7 @@ class GameInfo:
 		self._path = "./StartBase.py"
 		self._classname = "Start"
 		self._authors = []
-		self._services = []
+		self._services = {}
 		self._adddata = []
 		self._screenshots = []
 		if XmlPath != '':
@@ -49,7 +49,8 @@ class GameInfo:
 		#Ahora cargamos la informacion de los servicios (Critico)
 		for services in root.findall('Services'):
 			for service in services.findall('Service'):
-				self._services.append( (service.get('name'),service.attrib) )
+				#self._services.append( (service.get('name'),service.attrib) )
+                                self._services[service.get("name")]=service.attrib
 		#Finalmente cargamos los autores y la data adicional
 		for authors in root.findall('Authors'):
 			for author in authors.findall('Author'):

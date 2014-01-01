@@ -2,5 +2,5 @@
 <Config>
 	<servicePath dir="./services"/>
 	<gameDir dir="./games"/>
-	<gameList src="GameList_example.xml"/>
+	<gameList src="./GameList_example.xml"/>
 </Config>

@@ -6,7 +6,7 @@
 	<Date>21-12-2013</Date>
 	<Description>Juego de prueba para el Launcher del Arcade</Description>
 	<WebUpdate enable="true" repo="ftp://arcade.ing.puc.cl/games/AGT/release/latest/UpdateInfo.xml"/>
-	<MainClass name="MiJuego" file="test_pygame.py"/>
+	<MainClass name="MiJuego" file="./games/bh/test_pygame.py"/>
 	<CrashDump sendTo="jdheysen@uc.cl" prefix="[AGT Crash]"/>
 	<Authors>
 		<Author name="Jurgen Heysen"/>

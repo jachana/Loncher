@@ -3,7 +3,7 @@ import xml.etree.cElementTree as ET
 #Modulo que se encarga de tener algunas configuraciones del launcher
 servicePath = "./services"
 gameDir = "./games"
-gameList = "GameList.xml"
+gameList = "GameList_example.xml"
 
 def Loadcfg():
 	"""Metodo que carga la configuracion del launcher"""
