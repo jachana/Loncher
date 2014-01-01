@@ -39,7 +39,7 @@ class GameList:
 
     def getList(self):
         """Entrega la lista de objetos GameInfo"""
-        return self._list
+        return self._games
 
     def removeByCode(self,code):
         """Remueve un juego dado su codigo del arbol"""

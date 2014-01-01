@@ -2,7 +2,7 @@ import ReflectionLoader as RL
 import GameList
 import GameInfo
 import LauncherServiceInterface as LSI
-#Esto hace el link lógico con el resto del backend del Launcher, así la UI puede ser mas tonta
+#Esto hace el link logico con el resto del backend del Launcher, asi la UI puede ser mas tonta
 
 class ArcadeBackendFacade:
 	def __init__(self,gl,services):

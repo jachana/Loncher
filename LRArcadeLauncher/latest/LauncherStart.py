@@ -4,6 +4,7 @@ import GameList as GL
 import servicesDiscovery as SD
 import ArcadeConfig as AC
 import ArcadeBackendFacade as ABF
+import ArcadeCLI
 
 def LauncherMain():
 	#Comenzamos el inicio de las cosas
@@ -19,6 +20,8 @@ def LauncherMain():
 	#Primero inicializamos el backend
 	fac = ABF.ArcadeBackendFacade(lista,services)
 	#TODO: poner la GUI a andar
+	gui = ArcadeCLI.ArcadeCLI(fac)
+	gui.go()
 
 if __name__== "__main__":
 	LauncherMain()
