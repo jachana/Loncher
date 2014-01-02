@@ -8,7 +8,7 @@ def discover(path):
         os.chdir(path)
         for files in os.listdir("."):
                 if files.endswith(".py"):
-                        loaded = imp.load_source("Loaded",files)
+                        loaded = imp.load_source("services."+os.path.splitext(os.path.basename(files))[0],files)
                         try:
                                 name,serverFactory=eval("loaded.register()")
                                 servlist[name]=serverFactory

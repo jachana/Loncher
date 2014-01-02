@@ -11,7 +11,7 @@ def factory(args,code):
 #Metodo que registra el servicio al momento de descubrirlo
 def register():
 	"""Registra el servicio al descubrir servicios"""
-	return "HighScoreService",factory
+	return "HighscoreService",factory
 	
 class HighScoreServiceProvider:
 	"""Servicio de punatjes para los juegos"""
