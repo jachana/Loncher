@@ -30,8 +30,8 @@ class MiJuego(StartBase.Start):
  
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
-IMG_DIR = "./games/bh/imagenes"
-SONIDO_DIR = "./games/bh/sonidos"
+IMG_DIR = "./imagenes"
+SONIDO_DIR = "./sonidos"
  
 # ------------------------------
 # Clases y Funciones utilizadas
