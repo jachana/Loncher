@@ -1,4 +1,5 @@
 import GameList as GL
+import ArcadeConfig as AC
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -7,7 +8,8 @@ parser.add_argument("-l","--list", action="store_true",help="Lists currently ins
 parser.add_argument("-u","--uninstall",help="Unregisters game given its code")
 args = parser.parse_args()
 
-xmlPath = 'GameList_example.xml'
+cfg = AC.Loadcfg()
+xmlPath = AC.gameList
 games = GL.GameList(xmlPath)
 if args.list:
 	print(games)
