@@ -2,6 +2,8 @@
 \usepackage{fancyhdr}
 \usepackage[utf8]{inputenc}
 \pagestyle{fancy}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{booktabs}
 \lhead{Arcade La Resistencia\\Documento especificación de juegos\\Versión 1.0 - \today \\}
 \begin{document}
 
@@ -22,7 +24,7 @@ El presente documento tiene como objetvo instruir a los desarrolladores de video
 
 \subsection{Código}
 
-Los juegos deben exponer un archivo .py con una clase que contenga el método {\em Go}, que debe recibir como parámetro un objeto del tipo {\em ArcadeServiceInterface} (ArcadeServiceInterface.py), este objeto será tratado mas adelante y es una interfaz a los servicios solicitados por el juego.
+Los juegos deben exponer un archivo .py con una clase que contenga el método {\tt Go}, que debe recibir como parámetro un objeto del tipo {\tt ArcadeServiceInterface} (ArcadeServiceInterface.py), este objeto será tratado mas adelante y es una interfaz a los servicios solicitados por el juego.
 
 \subsection{XML}
 
@@ -37,6 +39,9 @@ Se puede incluir la lista de autores mediante una sección \textless Authors\tex
 Otro aspecto a considerar es la lista contenida entre \textless Screenshots\textgreater  y \textless /Screenshots\textgreater  para incluir las screenshots del juego que se mostraran en el Launcher. cada una se indica con la etiqueta \textless Screenshot src="..."/\textgreater  donde src es el path a la screenshot.\\
 La lista denotada por \textless Services\textgreater y \textless /Services\textgreater  indica los servicios que solicita el juego al Launcher, cada servicio se solicita mediante \textless Service name="..." .../\textgreater  donde name es el nombre del servicio solicitado, además se deben incluir los parámetros requeridos por el servicio según su propio estándar.\\
 Adicionalmente se puede crear una lista denotada por \textless AdditionalData\textgreater  y \textless /AdditionalData\textgreater  para incluir datos adicionales. No hay especificaciones sobre los contenidos de esta lista.\\ 
+A continuación se presenta una tabla resumen sobre la información que debe contener el xml:
+
+\input{XmlTable.tex}
 
 \section{Servicios}
 
@@ -45,7 +50,7 @@ En esta sección se abordará la interfaz común de acceso a servicios.
 
 \subsection{Clase ArcadeServiceInterface}
 
-La clase {\em ArcadeServiceInterface} provee el acceso a los servicios del Arcade que son declarados en el .xml de información del juego. Los servicios contenidos en él se encuentran ya inicializados para el juego, se provee dos formas de acceder a los servicios.
+La clase {\tt ArcadeServiceInterface} provee el acceso a los servicios del Arcade que son declarados en el .xml de información del juego. Los servicios contenidos en él se encuentran ya inicializados para el juego, se provee dos formas de acceder a los servicios.
 
 \subsubsection{Método getServices()}
 
@@ -61,9 +66,9 @@ En una distribución normal del Launcher, los juegos pueden ser instalados sigui
 \begin{enumerate}
 	\item Descomprimir los contenidos del juego en una carpeta de elección.
 	\item Navegar a carpeta del Launcher.
-	\item En consola de comandos, ejecutar {\em python game\_install.py -i path\_a\_xml} \footnote{Ajustar a python 2.7 si no fuera el caso}
-	\item Verificar con {\em python game\_install.py -l}
+	\item En consola de comandos, ejecutar {\tt python game\_install.py -i path\_a\_xml} \footnote{Ajustar a python 2.7 si no fuera el caso}
+	\item Verificar con {\tt python game\_install.py -l}
 \end{enumerate}
-Puede desinstalar\footnote{No borra los archivos, solo quita el juego del registro del arcade} un juego con {\em python game\_install.py -u CODIGO} donde CODIGO es el codigo del juego que desea desinstalar. Puede ser visto ejecutando antes {\em python game\_install.py -l}
+Puede desinstalar\footnote{No borra los archivos, solo quita el juego del registro del arcade} un juego con {\tt python game\_install.py -u CODIGO} donde CODIGO es el codigo del juego que desea desinstalar. Puede ser visto ejecutando antes {\tt python game\_install.py -l}
 
 \end{document}
