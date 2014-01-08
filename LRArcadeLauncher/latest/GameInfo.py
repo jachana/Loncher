@@ -85,5 +85,9 @@ class GameInfo:
 		
 	def getAdditionalData(self):
 		return self._adddata
+	def getScreenshots(self):
+                return self._screenshots
+        def getDescripcion(self):
+                return self._description
 	
 	
