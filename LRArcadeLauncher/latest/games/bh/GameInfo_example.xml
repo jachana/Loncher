@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Game>
-	<Title>Aracde Game Test</Title>
+	<Title>Arcade Game Test</Title>
 	<Code>AGT</Code>
 	<Version>100</Version>
 	<Date>21-12-2013</Date>
@@ -15,7 +15,9 @@
 		<Author name="Ricardo Aldana"/>
 	</Authors>
 	<Screenshots>
-		<Screenshot src="./res/ss/shot1.png"/>
+		<Screenshot src="./games/bh/imagenes/omega.gif"/>
+    		<Screenshot src="./games/bh/imagenes/omega.gif"/>
+    		<Screenshot src="./games/bh/imagenes/omega.gif"/>
 	</Screenshots>
 	<Services>
 		<Service name="HighscoreService" max="10" storage="global"/>
