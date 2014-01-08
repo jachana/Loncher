@@ -32,7 +32,6 @@ class ArcadeGUI:
             i = "Imagenes\omega.gif"
 
       print("vamos con la primera imagen")
-      scr[0] = "Imagenes/omega.jpg"
       print(scr[0])
       imgaux = Image.open(scr[0])
       imgaux.thumbnail((600,600), Image.ANTIALIAS)
