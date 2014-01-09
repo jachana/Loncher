@@ -24,6 +24,9 @@ class ArcadeGUI:
       if gameinf == None:
          pass
 
+      #JH: Almacenamos gamecode
+      self.gamecode = gameinf.getCode()
+
       #Pedimos screenshots
       print()
       scr = gameinf.getScreenshots()
@@ -58,8 +61,11 @@ class ArcadeGUI:
       paneldesc = descripcion
       paneldesc.grid(row = 2, column = 2, columnspan = 3, sticky = W+E+N+S, padx = 5, pady = 5)
 
-
-      
+   def keyReturnEventHandler(self,event):
+      """Metodo encargado de procesar el apretar enter para lanzar un juego"""
+      if self.gamecode == None:
+         pass
+      self._back.LoadGame(self.gamecode)
 
    def __init__(self, backend):
       self._back = backend
@@ -79,6 +85,7 @@ class ArcadeGUI:
       lista_de_juegos = Listbox(root)
       lista_de_juegos.pack()
       lista_de_juegos.bind('<<ListBoxSelect>>',self.cargar_juego)
+      lista_de_juegos.bind("<Return>",self.keyReturnEventHandler)
 
       lista_de_juegos.config(font = ("Lucida Console", "20"), background = "black", activestyle = 'none', foreground = 'yellow', height = '27')
       for i in self._back.getGameList().getList():
