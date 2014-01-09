@@ -116,6 +116,47 @@ class jefe(pygame.sprite.Sprite):
         self.tickcount += 1
 
 
+class keyboard():
+
+    def __init__(self):
+        self.UP = False
+        self.DOWN = False
+        self.LEFT = False
+        self.RIGHT = False
+        self.SPACE = False
+
+    def check(self):
+        keydowns = pygame.event.get(pygame.KEYDOWN)
+        keyups = pygame.event.get(pygame.KEYUP)
+
+        for keydown in keydowns:
+
+            if keydown.key == K_ESCAPE:
+                sys.exit(0)
+            elif keydown.key == K_UP:
+                self.UP = True
+            elif keydown.key == K_DOWN:
+                self.DOWN = True
+            elif keydown.key == K_LEFT:
+                self.LEFT = True
+            elif keydown.key == K_RIGHT:
+                self.RIGHT = True
+            elif keydown.key == K_SPACE:
+                self.SPACE = True
+
+        for keyup in keyups:
+
+            if keyup.key == K_UP:
+                self.UP = False
+            elif keyup.key == K_DOWN:
+                self.DOWN = False
+            elif keyup.key == K_LEFT:
+                self.LEFT = False
+            elif keyup.key == K_RIGHT:
+                self.RIGHT = False
+            elif keyup.key == K_SPACE:
+                self.SPACE = False            
+
 # ------------------------------
 # Funcion principal del juego
 # ------------------------------
@@ -125,7 +166,7 @@ def main():
     pygame.init()
     pygame.mixer.init()
     # creamos la ventana y le indicamos un titulo:
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.FULLSCREEN)
     pygame.display.set_caption("BulletHell POC")
     fondo = load_image("0.jpg",IMG_DIR,False)
 
@@ -137,6 +178,9 @@ def main():
     clock = pygame.time.Clock()
     pygame.key.set_repeat(1, 25)  # Activa repeticion de teclas
     pygame.mouse.set_visible(False)
+
+    #Creamos el teclado
+    key = keyboard()
  
     # el bucle principal del juego
     while True:
@@ -159,27 +203,53 @@ def main():
            sys.exit(0)
             
         # Posibles entradas del teclado y mouse
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit(0)
-            elif event.type == pygame.KEYDOWN:
-                if event.key == K_UP:
-                    player.rect.centery -=5
-                elif event.key == K_DOWN:
-                    player.rect.centery +=5
-                elif event.key == K_LEFT:
-                    player.rect.centerx -= 5
-                elif event.key == K_RIGHT:
-                    player.rect.centerx += 5
-                elif event.key == K_SPACE:
-                    print ("Creando bala")
-                    bb = bala(1,0,2)
-                    bb.rect.centerx = player.rect.centerx
-                    bb.rect.centery = player.rect.centery - 50
-                    balas.append(bb)
-                    #balas.append(bala(1,0,2))
-                elif event.key == K_ESCAPE:
-                    sys.exit(0)
+        key.check()
+
+        if(key.UP):
+            player.rect.centery -=5
+        if(key.DOWN):
+            player.rect.centery +=5
+        if(key.LEFT):
+            player.rect.centerx -= 5
+        if(key.RIGHT):
+            player.rect.centerx += 5
+        if(key.SPACE):
+            print ("Creando bala")
+            bb = bala(1,0,10)
+            bb.rect.centerx = player.rect.centerx
+            bb.rect.centery = player.rect.centery - 50
+            balas.append(bb)
+
+
+
+        
+        if len(pygame.event.get(pygame.QUIT))>0:
+            sys.exit(0)
+
+        
+##        for event in events:
+##            if event.type == pygame.QUIT:
+##                sys.exit(0)
+##            elif event.type == pygame.KEYDOWN:
+##                if event.key == K_ESCAPE:
+##                    sys.exit(0)
+##                elif event.key == K_UP:
+##                    player.rect.centery -=5
+##                elif event.key == K_DOWN:
+##                    player.rect.centery +=5
+##                elif event.key == K_LEFT:
+##                    player.rect.centerx -= 5
+##                elif event.key == K_RIGHT:
+##                    player.rect.centerx += 5
+##                elif event.key == K_SPACE:
+##                    print ("Creando bala")
+##                    bb = bala(1,0,2)
+##                    bb.rect.centerx = player.rect.centerx
+##                    bb.rect.centery = player.rect.centery - 50
+##                    balas.append(bb)
+##                    
+##                    #balas.append(bala(1,0,2))
+                
 
         #Rendering
         screen.blit(fondo,(0,0))
