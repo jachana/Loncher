@@ -30,7 +30,7 @@ class MiJuego(StartBase.Start):
  
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
-IMG_DIR = "bh/imagenes"
+IMG_DIR = "bh"+os.path.pathsep+"imagenes"
 SONIDO_DIR = "bh/sonidos"
  
 # ------------------------------
@@ -91,7 +91,7 @@ class jugador(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.hp = hp
         self.image = load_image("nave.png",IMG_DIR,True)
-        self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
+        #self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
         self.speed = [0,0]
         self.rect.centerx = SCREEN_WIDTH /2
@@ -104,7 +104,7 @@ class jefe(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.hp = hp
         self.image = load_image("jefe.png",IMG_DIR,True)
-        self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
+        #self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
         self.speed = [0,0]
         self.rect.centerx = SCREEN_WIDTH/2
@@ -124,6 +124,8 @@ class jefe(pygame.sprite.Sprite):
 def main():
     pygame.init()
     pygame.mixer.init()
+      
+    
     # creamos la ventana y le indicamos un titulo:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("BulletHell POC")

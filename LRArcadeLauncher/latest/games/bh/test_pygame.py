@@ -14,6 +14,8 @@ from pygame.locals import *
 import sys
 import os
 import StartBase
+import math
+import random
 
 
 
@@ -93,9 +95,54 @@ class jugador(pygame.sprite.Sprite):
         self.image = load_image("nave.png",IMG_DIR,True)
         self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
-        self.speed = [0,0]
         self.rect.centerx = SCREEN_WIDTH /2
         self.rect.centery = SCREEN_HEIGHT - 20
+
+    def keyinput(self, key, balas):
+        #velocidad del jugador
+        s = 6
+        #velocidad diagonal
+        ds = math.cos(math.pi/4)*s
+        
+        if(key.UP):
+            if(key.DOWN):
+                pass
+            elif(key.LEFT):
+                self.rect.centery-=ds
+                self.rect.centerx-=ds
+            elif(key.RIGHT):
+                self.rect.centery-=ds
+                self.rect.centerx+=ds
+            else:
+                self.rect.centery-=s
+                
+        elif(key.DOWN):
+
+            if(key.LEFT):
+                self.rect.centerx-=ds
+                self.rect.centery+=ds
+            elif(key.RIGHT):
+                self.rect.centerx+=ds
+                self.rect.centery+=ds
+            else:
+                self.rect.centery+=s
+                
+        elif(key.LEFT):
+            if(key.RIGHT):
+                pass
+            else:
+                self.rect.centerx-=s
+        elif(key.RIGHT):
+            self.rect.centerx += s
+
+
+        if(key.SPACE):
+            print ("Creando bala")
+            bb = bala(1,0,25)
+            bb.rect.centerx = self.rect.centerx
+            bb.rect.centery = self.rect.centery - random.randint (16,50)
+            balas.append(bb)
+    
 
 class jefe(pygame.sprite.Sprite):
     "Jefe y comportamiento"
@@ -106,10 +153,20 @@ class jefe(pygame.sprite.Sprite):
         self.image = load_image("jefe.png",IMG_DIR,True)
         self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
-        self.speed = [0,0]
         self.rect.centerx = SCREEN_WIDTH/2
-        self.rect.centery = 100
+        self.rect.centery = -201
         self.tickcount = 0
+
+    def enter(self):
+        self.rect.centery+=3
+
+        if(self.rect.centery==0):
+            pygame.mixer.music.fadeout(1500)
+        
+        if(self.rect.centery == 150):
+            return True
+        else:
+            return False
 
     def tick(self):
         "IA del jefe"
@@ -165,10 +222,19 @@ class keyboard():
 def main():
     pygame.init()
     pygame.mixer.init()
+
+    pygame.mixer.music.load(os.path.join(SONIDO_DIR,"space_0.mp3"))
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(0)
+
+    
+
+
+    
     # creamos la ventana y le indicamos un titulo:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.FULLSCREEN)
     pygame.display.set_caption("BulletHell POC")
-    fondo = load_image("0.jpg",IMG_DIR,False)
+    fondo = load_image("espeis.png",IMG_DIR,False)
 
     #creo contenedores globales
     balas = []
@@ -181,8 +247,48 @@ def main():
 
     #Creamos el teclado
     key = keyboard()
+
+    
+    #bucle de introduccion
+    intro = 0
+    while True:
+        clock.tick(60)
+
+        #Mover balas
+        for b in balas[:]:
+            b.update()
+
+        # Posibles entradas del teclado y mouse
+        key.check()
+
+        #El player actua segun el input
+        player.keyinput(key,balas)                   
+        
+        
+        if len(pygame.event.get(pygame.QUIT))>0:
+            sys.exit(0)
+            
+        #Rendering
+        screen.blit(fondo,(0,intro-360))
+        screen.blit(player.image,player.rect)
+        screen.blit(boss.image,boss.rect)
+        for b in balas:
+            screen.blit(b.image,b.rect)
+        pygame.display.flip()
+
+      
+        if(intro == 360):
+            pass
+            if(boss.enter()):
+                break
+        else:
+            intro += 0.5
  
     # el bucle principal del juego
+    pygame.mixer.music.load(os.path.join(SONIDO_DIR,"rail.ogg"))
+    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.play(-1)
+    
     while True:
         clock.tick(60)
         boss.tick()
@@ -197,59 +303,23 @@ def main():
             b.update()
 
         #condiciones de fin
-        if boss.hp <= 0:
-           sys.exit(0)
+        if boss.hp <= 0:            
+            sys.exit(0)
         elif player.hp <= 0:
-           sys.exit(0)
+            sys.exit(0)
             
         # Posibles entradas del teclado y mouse
         key.check()
 
-        if(key.UP):
-            player.rect.centery -=5
-        if(key.DOWN):
-            player.rect.centery +=5
-        if(key.LEFT):
-            player.rect.centerx -= 5
-        if(key.RIGHT):
-            player.rect.centerx += 5
-        if(key.SPACE):
-            print ("Creando bala")
-            bb = bala(1,0,10)
-            bb.rect.centerx = player.rect.centerx
-            bb.rect.centery = player.rect.centery - 50
-            balas.append(bb)
-
-
-
+        #El player actua segun el input
+        player.keyinput(key,balas)
+                    
+        
         
         if len(pygame.event.get(pygame.QUIT))>0:
             sys.exit(0)
 
-        
-##        for event in events:
-##            if event.type == pygame.QUIT:
-##                sys.exit(0)
-##            elif event.type == pygame.KEYDOWN:
-##                if event.key == K_ESCAPE:
-##                    sys.exit(0)
-##                elif event.key == K_UP:
-##                    player.rect.centery -=5
-##                elif event.key == K_DOWN:
-##                    player.rect.centery +=5
-##                elif event.key == K_LEFT:
-##                    player.rect.centerx -= 5
-##                elif event.key == K_RIGHT:
-##                    player.rect.centerx += 5
-##                elif event.key == K_SPACE:
-##                    print ("Creando bala")
-##                    bb = bala(1,0,2)
-##                    bb.rect.centerx = player.rect.centerx
-##                    bb.rect.centery = player.rect.centery - 50
-##                    balas.append(bb)
-##                    
-##                    #balas.append(bala(1,0,2))
-                
+                       
 
         #Rendering
         screen.blit(fondo,(0,0))
