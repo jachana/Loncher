@@ -15,9 +15,9 @@
 		<Author name="Ricardo Aldana"/>
 	</Authors>
 	<Screenshots>
-		<Screenshot src="./games/bh/imagenes/omega.gif"/>
-		<Screenshot src="./games/bh/imagenes/omega.gif"/>
-		<Screenshot src="./games/bh/imagenes/omega.gif"/>
+		<Screenshot src="./games/bh/imagenes/SS.png"/>
+		<Screenshot src="./games/bh/imagenes/SS.png"/>
+		<Screenshot src="./games/bh/imagenes/SS.png"/>
 	</Screenshots>
 	<Services>
 		<Service name="HighscoreService" max="10" storage="global"/>
