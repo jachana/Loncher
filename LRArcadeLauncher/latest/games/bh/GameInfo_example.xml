@@ -1,13 +1,13 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <Game>
-	<Title>Arcade Game Test</Title>
-	<Code>AGT</Code>
+	<Title>Bullet Hell Inferno</Title>
+	<Code>BHI</Code>
 	<Version>100</Version>
 	<Date>21-12-2013</Date>
 	<Description>Juego de prueba para el Launcher del Arcade</Description>
 	<WebUpdate enable="true" repo="ftp://arcade.ing.puc.cl/games/AGT/release/latest/UpdateInfo.xml"/>
 	<MainClass name="MiJuego" file="./games/bh/test_pygame.py"/>
-	<CrashDump sendTo="jdheysen@uc.cl" prefix="[AGT Crash]"/>
+	<CrashDump sendTo="jdheysen@uc.cl" prefix="[BHI Crash]"/>
 	<Authors>
 		<Author name="Jurgen Heysen"/>
 		<Author name="Vicente Errázuriz"/>
@@ -16,13 +16,11 @@
 	</Authors>
 	<Screenshots>
 		<Screenshot src="./games/bh/imagenes/omega.gif"/>
-    		<Screenshot src="./games/bh/imagenes/omega.gif"/>
-    		<Screenshot src="./games/bh/imagenes/omega.gif"/>
+		<Screenshot src="./games/bh/imagenes/omega.gif"/>
+		<Screenshot src="./games/bh/imagenes/omega.gif"/>
 	</Screenshots>
 	<Services>
 		<Service name="HighscoreService" max="10" storage="global"/>
-		<Service name="SaveGameService" storage="removable" path="default"/>
-		<Service name="MetricService" report="1w" format="xml"/> 
 	</Services>
 	<AdditionalData>
 	</AdditionalData>

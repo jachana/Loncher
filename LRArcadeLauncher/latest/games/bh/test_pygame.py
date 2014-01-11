@@ -77,9 +77,10 @@ class bala(pygame.sprite.Sprite):
     def colision(self, objetivo):
         "Detecta hits"
         if self.rect.colliderect(objetivo.rect):
-            objetivo.hp = objetivo.hp - self.dmg
-            objetivo.HitSound.play()
-
+            objetivo.damage(self.dmg)
+            return True
+        return False
+            
     def update(self):
         self.rect.centerx += self.speed[0]
         self.rect.centery -= self.speed[1]
@@ -89,20 +90,33 @@ class jugador(pygame.sprite.Sprite):
     def __init__(self, *groups):
         return super(jugador, self).__init__(*groups)
 
-    def __init__(self, hp):
+    def __init__(self):
+        self.score = 0
         pygame.sprite.Sprite.__init__(self)
-        self.hp = hp
+        self.lazor = False
         self.image = load_image("nave.png",IMG_DIR,True)
         self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
         self.rect.centerx = SCREEN_WIDTH /2
         self.rect.centery = SCREEN_HEIGHT - 20
+        
+        self.laser = [Rect(self.rect.centerx-3,0,7,self.rect.centery),Rect(self.rect.centerx-2,0,5,self.rect.centery),Rect(self.rect.centerx-1,0,3,self.rect.centery),Rect(self.rect.centerx,0,1,self.rect.centery)]
 
-    def keyinput(self, key, balas):
+    def damage(self, dmg):
+        pass
+
+    def keyinput(self, key):
         #velocidad del jugador
         s = 6
         #velocidad diagonal
         ds = math.cos(math.pi/4)*s
+
+        #Coordenadas anteriores por si se sale de la pantalla
+
+        oldx = self.rect.centerx
+        oldy = self.rect.centery
+
+        #Movemos la nave segun que tecla esta presionada
         
         if(key.UP):
             if(key.DOWN):
@@ -135,21 +149,37 @@ class jugador(pygame.sprite.Sprite):
         elif(key.RIGHT):
             self.rect.centerx += s
 
+        #Si la nave salio de la pantalla con ese movimiento... el movimiento se cancela
+        if not screen.get_rect().contains(self.rect):
+            self.rect.centerx = oldx
+            self.rect.centery = oldy
 
+        #Actualizamos la posicion del laser
+        self.laser[0].x = self.rect.centerx-3
+        self.laser[0].height = self.rect.centery
+        self.laser[1].x = self.rect.centerx-2
+        self.laser[1].height = self.rect.centery
+        self.laser[2].x = self.rect.centerx-1
+        self.laser[2].height = self.rect.centery
+        self.laser[3].x = self.rect.centerx
+        self.laser[3].height = self.rect.centery
+        
+
+        #Si se esta aprentando espacio, disparar
         if(key.SPACE):
-            print ("Creando bala")
-            bb = bala(1,0,25)
-            bb.rect.centerx = self.rect.centerx
-            bb.rect.centery = self.rect.centery - random.randint (16,50)
-            balas.append(bb)
+            self.lazor = True
+        else:
+            self.lazor = False
+            
     
 
 class jefe(pygame.sprite.Sprite):
     "Jefe y comportamiento"
 
-    def __init__(self, hp):
+    def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.hp = hp
+        self.hp = 6000
+        self.hpbar = [Rect(20,20,600,2),Rect(20,22,600,1),Rect(20,23,600,1),Rect(20,24,600,1),Rect(20,25,600,1)]
         self.image = load_image("jefe.png",IMG_DIR,True)
         self.HitSound = load_sound("hit.mp3",SONIDO_DIR)
         self.rect = self.image.get_rect()
@@ -159,14 +189,18 @@ class jefe(pygame.sprite.Sprite):
 
     def enter(self):
         self.rect.centery+=3
-
-        if(self.rect.centery==0):
-            pygame.mixer.music.fadeout(1500)
         
         if(self.rect.centery == 150):
             return True
         else:
             return False
+        
+    def checkdmg(self,player):
+        if(player.lazor and self.rect.collidelist(player.laser)>=0):
+            self.hp -= 2
+            player.score +=2
+            for bar in self.hpbar:
+                bar.width = self.hp//10         
 
     def tick(self):
         "IA del jefe"
@@ -189,7 +223,7 @@ class keyboard():
         for keydown in keydowns:
 
             if keydown.key == K_ESCAPE:
-                sys.exit(0)
+                quitgame(":(")
             elif keydown.key == K_UP:
                 self.UP = True
             elif keydown.key == K_DOWN:
@@ -225,12 +259,10 @@ def main():
 
     pygame.mixer.music.load(os.path.join(SONIDO_DIR,"space_0.mp3"))
     pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(0)
-
-    
+    pygame.mixer.music.play(0) 
 
 
-    
+    global screen    
     # creamos la ventana y le indicamos un titulo:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.FULLSCREEN)
     pygame.display.set_caption("BulletHell POC")
@@ -239,11 +271,15 @@ def main():
     #creo contenedores globales
     balas = []
 
-    player = jugador(100)
-    boss = jefe(10)
+    player = jugador()
+    boss = jefe()
     clock = pygame.time.Clock()
     pygame.key.set_repeat(1, 25)  # Activa repeticion de teclas
     pygame.mouse.set_visible(False)
+
+    
+    colorbarra = [Color(255,0,0,0),Color(220,0,0,0),Color(160,0,0,0),Color(100,0,0,0),Color(40,0,0,0)]
+    lasercolor = [Color(0,0,255,0),Color(135,206,250,0),Color(255,255,255,0),Color(255,255,255,0)]
 
     #Creamos el teclado
     key = keyboard()
@@ -262,7 +298,7 @@ def main():
         key.check()
 
         #El player actua segun el input
-        player.keyinput(key,balas)                   
+        player.keyinput(key)                   
         
         
         if len(pygame.event.get(pygame.QUIT))>0:
@@ -270,65 +306,86 @@ def main():
             
         #Rendering
         screen.blit(fondo,(0,intro-360))
+        if(player.lazor):
+            for l in range(4):
+                screen.fill(lasercolor[l],player.laser[l])
         screen.blit(player.image,player.rect)
         screen.blit(boss.image,boss.rect)
         for b in balas:
             screen.blit(b.image,b.rect)
         pygame.display.flip()
 
-      
+        fadeout = True
         if(intro == 360):
+            if(fadeout):
+                pygame.mixer.music.fadeout(1500)
+                fadeout = False
             pass
             if(boss.enter()):
                 break
         else:
             intro += 0.5
  
-    # el bucle principal del juego
+    #Comienza la pelea.... MUSICA MAESTRO!
     pygame.mixer.music.load(os.path.join(SONIDO_DIR,"rail.ogg"))
     pygame.mixer.music.set_volume(1)
     pygame.mixer.music.play(-1)
     
+    # el bucle principal del juego: 
     while True:
         clock.tick(60)
         boss.tick()
 
         #Analísis de colisiones
-        for b in balas[:]:
-            b.colision(player)
-            b.colision(boss)
+        boss.checkdmg(player)
+        
+        for b in balas:
+            if(b.colision(player)):
+                pass
+            if(b.colision(boss)):
+                pass
 
         #Mover balas
-        for b in balas[:]:
+        for b in balas:
             b.update()
 
         #condiciones de fin
         if boss.hp <= 0:            
-            sys.exit(0)
-        elif player.hp <= 0:
-            sys.exit(0)
+            quitgame(player.score)
             
-        # Posibles entradas del teclado y mouse
+        #Posibles entradas del teclado y mouse
         key.check()
 
         #El player actua segun el input
-        player.keyinput(key,balas)
+        player.keyinput(key)
                     
         
-        
+        #Si se le indica al juego que ya no mas... ya no mas!
         if len(pygame.event.get(pygame.QUIT))>0:
-            sys.exit(0)
-
-                       
+            quitgame(player.score)
 
         #Rendering
         screen.blit(fondo,(0,0))
+        if(player.lazor):
+            for l in range(4):
+                screen.fill(lasercolor[l],player.laser[l])
         screen.blit(player.image,player.rect)
         screen.blit(boss.image,boss.rect)
         for b in balas:
             screen.blit(b.image,b.rect)
+        for i in range(5):
+            screen.fill(colorbarra[i],boss.hpbar[i])
+        
+        
         pygame.display.flip()
- 
+
+def quitgame(score):
+    
+
+
+    
+    print("Puntaje obtenido: "+str(score))
+    sys.exit(0)    
  
 if __name__ == "__main__":
     main()
