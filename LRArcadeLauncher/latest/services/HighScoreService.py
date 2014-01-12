@@ -28,30 +28,44 @@ class HighScoreServiceProvider:
 		
 
 	def initialize(self):
+		"""Inicializa el proveedor"""
 		import xml.etree.cElementTree as ET
 		self._activated = True
 		self._tree = ET.ElementTree()
 		self._root = self._tree.getroot()
 		try:
-			self._tree = ET.ElementTree(None,"./data/scores/"+self._code+".xml")
+			print("Init main block begin")
+			self._tree = ET.ElementTree(None,"./data/scores/"+str(self._code)+".xml")
 			self._root = self._tree.getroot()
 			for score in self._root.findall("score"):
 				self._scorelist.append( (score.get("points"),score.get("name")) )
 			self._scorelist = self._scorelist.sort()
 			if len(self._scorelist) > max:
-				self._scorelist = self._scorelist[max:]
+				#self._scorelist = self._scorelist[0:max]
+                                pass
+			print("Init main block end")
 		except Exception:
-			pass
+			print("Init Exception block")
+			import os
+			basedir = os.path.dirname("./data/scores/"+str(self._code)+".xml")
+			if not os.path.exists(basedir):
+				os.makedirs(basedir)
+			open("./data/scores/"+str(self._code)+".xml", 'a').close()
+			self._root = ET.Element("Scores")
+			self._tree = ET.ElementTree(self._root)
+			self._tree.write("./data/scores/"+str(self._code)+".xml")
+			print("Init exception block end")
 		
 	def register(self,score,name):
 		"""Registra un score score para el jugador name, si esta en el top max"""
+		import xml.etree.cElementTree as ET
 		if not self._activated:
 			return
 		self._scorelist.append( (score,name) )
-		nuevo = ET.SubElement(self._root,"score")
-		nuevo.set("points",score)
+		nuevo = ET.SubElement(self._root,"Score")
+		nuevo.set("points",str(score))
 		nuevo.set("name",name)
-		self._tree.write("./data/scores/"+self._code+".xml")
+		self._tree.write("./data/scores/"+str(self._code)+".xml")
 		
 	def getScores(self):
 		"""Retorna una lista con los scores guardados"""
