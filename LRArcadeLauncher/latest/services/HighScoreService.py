@@ -21,10 +21,17 @@ class HighScoreServiceProvider:
 		self._code = code
 		self._max = max
 		self._storage = storage
+		self._tree = None
+		self._root = None
+		self._activated = False
+		self._scorelist = []
+		
+
+	def initialize(self):
+		import xml.etree.cElementTree as ET
+		self._activated = True
 		self._tree = ET.ElementTree()
 		self._root = self._tree.getroot()
-		self._scorelist = []
-		import xml.etree.cElementTree as ET
 		try:
 			self._tree = ET.ElementTree(None,"./data/scores/"+self._code+".xml")
 			self._root = self._tree.getroot()
@@ -38,6 +45,8 @@ class HighScoreServiceProvider:
 		
 	def register(self,score,name):
 		"""Registra un score score para el jugador name, si esta en el top max"""
+		if not self._activated:
+			return
 		self._scorelist.append( (score,name) )
 		nuevo = ET.SubElement(self._root,"score")
 		nuevo.set("points",score)
