@@ -1,4 +1,5 @@
 #Servicio de Highscores
+#Version 1.0 por Jurgen Heysen
 
 #Metodo que crea un objeto que representa el servicio a partir de
 #un diccionario de argumentos y el codigo del juego
@@ -38,14 +39,18 @@ class HighScoreServiceProvider:
 			print("Init main block begin")
 			self._tree = ET.ElementTree(None,"./data/scores/"+str(self._code)+".xml")
 			self._root = self._tree.getroot()
-			for score in self._root.findall("score"):
+			for score in self._root.findall("Score"):
 				self._scorelist.append( (score.get("points"),score.get("name")) )
-			self._scorelist = self._scorelist.sort()
+                        print("Pre-sort: "+str(self._scorelist))
+			self._scorelist.sort()
+			print("sorted list, list: "+str(self._scorelist))
 			if len(self._scorelist) > max:
-				self._scorelist = self._scorelist[max:]
-                                pass
+				nuescores = []
+				for i in range(0,max):
+                                        nuescores.append(self._scorelist[i])
+                                self._scorelist = nuescores
 			print("Init main block end")
-		except Exception:
+		except Exception as e:
 			print("Init Exception block")
 			import os
 			basedir = os.path.dirname("./data/scores/"+str(self._code)+".xml")
@@ -58,6 +63,8 @@ class HighScoreServiceProvider:
 			if self._scorelist == None:
                                 self._scorelist = []
 			print("Init exception block end")
+			print("Exception args:")
+			print(str(e.args))
 		
 	def register(self,score,name):
 		"""Registra un score score para el jugador name, si esta en el top max"""

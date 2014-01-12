@@ -36,7 +36,10 @@ def test():
                 provider2.register(score,name)
         lista_cre = provider2.getScores()
         provider3 = HS.factory({"max":10,"storage":"internal"},"DEM2")
+        provider3.initialize()
         lista_de = provider3.getScores()
+        lista_cre.sort()
+        lista_de.sort()
         print(lista_cre)
         print(lista_de)
         if lista_cre == lista_de:
