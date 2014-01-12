@@ -264,7 +264,7 @@ class jefe(pygame.sprite.Sprite):
     def enter(self):
         self.rect.centery+=3
         
-        if(self.rect.centery == 150):
+        if(self.rect.centery == 99):
             return True
         else:
             return False
@@ -326,8 +326,8 @@ class jefe(pygame.sprite.Sprite):
         r = 1
         spd = 4
         mu = self.tickcount*a
-        x = self.rect.centerx+math.cos(mu)*r
-        y = self.rect.centery-math.sin(mu)*r-20
+        x = self.rect.centerx-10+math.cos(mu)*r
+        y = self.rect.centery+50-math.sin(mu)*r-20
         spdy = spd*math.sin(mu)
         spdx = spd*math.cos(mu)
         bullet = bala(x,y,spdx,spdy,4,6)
@@ -342,8 +342,8 @@ class jefe(pygame.sprite.Sprite):
         r = 1
         spd = 4
         mu = self.tickcount*a
-        x = self.rect.centerx+math.cos(mu)*r
-        y = self.rect.centery-math.sin(mu)*r-20
+        x = self.rect.centerx-10+math.cos(mu)*r
+        y = self.rect.centery+50-math.sin(mu)*r-20
         spdy = spd*math.sin(mu)
         spdx = spd*math.cos(mu)
         bullet = bala(x,y,spdx,spdy,5,14)
@@ -358,8 +358,8 @@ class jefe(pygame.sprite.Sprite):
         r = math.sin(self.tickcount*math.pi/360)
         spd = 3
         mu = self.tickcount*a
-        x = self.rect.centerx+math.cos(mu)*r
-        y = self.rect.centery-math.sin(mu)*r-20
+        x = self.rect.centerx-10+math.cos(mu)*r
+        y = self.rect.centery+50-math.sin(mu)*r-20
         spdy = spd*math.sin(mu)
         spdx = spd*math.cos(mu)
         bullet = bala(x,y,spdx,spdy,4,10)
@@ -369,8 +369,8 @@ class jefe(pygame.sprite.Sprite):
         r = math.sin(self.tickcount*math.pi/360)
         spd = 3
         mu = self.tickcount*a
-        x = self.rect.centerx+math.cos(mu)*r
-        y = self.rect.centery-math.sin(mu)*r-20
+        x = self.rect.centerx-10+math.cos(mu)*r
+        y = self.rect.centery+50-math.sin(mu)*r-20
         spdy = spd*math.sin(mu)
         spdx = spd*math.cos(mu)
         bullet = bala(x,y,spdx,spdy,4,8)
@@ -386,15 +386,15 @@ class jefe(pygame.sprite.Sprite):
 
         if(len(self.minions)>0):
             self.minions[0].radius = 260*math.sin(self.tickcount*math.pi/360)
-            self.minions[0].update(self.rect.centerx,self.rect.centery-20)
+            self.minions[0].update(self.rect.centerx-10,self.rect.centery+50-20)
         else:
             mi = minion(self.rect.centerx,self.rect.centery-20,mu,100,25,5)            
             self.minions.append(mi)
             
         self.tickcount +=1
         
-        x = self.rect.centerx+math.cos(mu)*r
-        y = self.rect.centery-math.sin(mu)*r-20
+        x = self.rect.centerx-10+math.cos(mu)*r
+        y = self.rect.centery+50-math.sin(mu)*r-20
         spdy = spd*math.sin(mu)
         spdx = spd*math.cos(mu)
         bullet = bala(x,y,spdx,spdy,7,10)
@@ -409,9 +409,9 @@ class jefe(pygame.sprite.Sprite):
         
         if(len(self.minions) > 0):
             for m in self.minions:
-                spdx = self.rect.centerx
-                spdy = self.rect.centery
-                m.update(self.rect.centerx,self.rect.centery)
+                spdx = self.rect.centerx-10
+                spdy = self.rect.centery+30
+                m.update(self.rect.centerx-10,self.rect.centery+30)
 
                 spdx-= m.x
                 spdy-= m.y
@@ -426,7 +426,7 @@ class jefe(pygame.sprite.Sprite):
         else:
             n = 3
             for i in range(n):
-                mi = minion(self.rect.centerx,self.rect.centery,(2*math.pi/n)*i,20,math.pi/30,2)
+                mi = minion(self.rect.centerx-10,self.rect.centery+30,(2*math.pi/n)*i,1,math.pi/30,2)
                 mi.accel = math.pi/4000
                 self.minions.append(mi)     
 
@@ -461,7 +461,7 @@ class jefe(pygame.sprite.Sprite):
                     bullet = bala(m.x,m.y,-spdx*mult,spdy*mult,0.3,16)
                     self.balas.append(bullet)
 
-                    if(m.radius > 40):
+                    if(m.radius > 35):
                         m.radius-=2
                     elif(self.tickcount%15 == 0):
                         global player
@@ -550,7 +550,7 @@ class keyboard():
         for keydown in keydowns:
 
             if keydown.key == K_ESCAPE:
-                quitgame(":(")
+                quitgame()
             elif keydown.key == K_UP:
                 self.UP = True
             elif keydown.key == K_DOWN:
@@ -565,7 +565,13 @@ class keyboard():
                 self.SHIFT = True
             elif keydown.key == K_DELETE:
                 global GOD
-                GOD = not GOD
+                GOD = not GOD                
+                global player
+                if(GOD):
+                    player.dmg = 10
+                else:
+                    player.dmg = 0.5
+                    
 
         for keyup in keyups:
 
@@ -582,6 +588,40 @@ class keyboard():
             elif keyup.key == K_LSHIFT:
                 self.SHIFT = False
 
+#---------------------------------------------------
+
+class blast(pygame.sprite.Sprite):
+    
+    def __init__(self,x,y,small = True):
+        pygame.sprite.Sprite.__init__(self)
+        self.blast = load_image("blast.png",IMG_DIR,True)        
+        self.image = []
+        self.size = 192
+        self.speed = 0.2375
+        self.counter = 0.0
+        
+        if(small):
+            self.blast = pygame.transform.scale(self.blast,(96*5,96*4))
+            self.size = 96
+            self.speed = 0.38
+
+        self.rect = Rect(x-self.size/2,y-self.size/2,self.size,self.size)
+
+        for j in range(4):
+            for i in range(5):
+                self.image.append(self.blast.subsurface(Rect(i*self.size,j*self.size,self.size,self.size)))
+        
+    def animate(self):
+        global screen
+        screen.blit(self.image[int(self.counter)],self.rect)
+        self.counter+=self.speed
+
+        if(int(self.counter)>19):
+            return True
+        return False
+
+        
+
 # ------------------------------
 # Funcion principal del juego
 # ------------------------------
@@ -596,28 +636,37 @@ def main():
     global screen    
     # creamos la ventana y le indicamos un titulo:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.FULLSCREEN)
-    pygame.display.set_caption("BulletHell POC")
-    fondo = load_image("espeis.png",IMG_DIR,False)    
-
+    pygame.display.set_caption("BulletHell")
+    #Hermoso fondo de la batalla
+    global fondo
+    fondo = load_image("espeis.png",IMG_DIR,False)
+    #GODMODE
+    global GODSHIP
     GODSHIP = load_image("shipa.png",IMG_DIR,True)
     
     #Instanciamos al jugador y al jefe
     global player
     player = jugador()
+    global boss
     boss = jefe()
 
     #?????????
+    global clock
     clock = pygame.time.Clock()
 
     #Escondemos el mouse
     pygame.mouse.set_visible(False)
 
     #Establecemos los colores de los rectangulos que se dibujaran a mano (laser y barra de Hp del jefe)
+    global colorbarra
     colorbarra = [Color(255,0,0,0),Color(220,0,0,0),Color(160,0,0,0),Color(100,0,0,0),Color(40,0,0,0)]
+    global lasercolor
     lasercolor = [Color(0,0,255,0),Color(135,206,250,0),Color(255,255,255,0),Color(255,255,255,0)]
+    global focuscolor
     focuscolor = [Color(0,0,0,0),Color(100,0,100,0),Color(221,160,221,0),Color(255,255,255,0)]
 
     #Creamos el teclado
+    global key
     key = keyboard()
 
 
@@ -646,7 +695,7 @@ def main():
         
         # Si hay que salirse nos salimos :c
         if len(pygame.event.get(pygame.QUIT))>0:
-            quitgame(player.score)
+            quitgame()
             
         #Rendering
         screen.blit(fondo,(0,intro-360)) #Nos acercamos hacia el horizonte
@@ -674,7 +723,7 @@ def main():
             if(boss.enter()): #Y le decimos al jefazo que entre
                 break
         else:
-            intro += 0.5 #A que velocidad se scrollea la pantalla
+            intro += 2 #A que velocidad se scrollea la pantalla
 
 #--------------------------------
  
@@ -696,11 +745,11 @@ def main():
         if not GOD:
             if(player.checkdmg(boss)):
                 boss.balas = []
-                quitgame(player.score,"player")
+                quitgame("player")
         
         #Condiciones de fin
         if boss.hp <= 0:            
-            quitgame(player.score,"boss")
+            quitgame("boss")
             
         #Posibles entradas del teclado y mouse
         key.check()
@@ -711,7 +760,7 @@ def main():
         
         #Si se le indica al juego que ya no mas... ya no mas!
         if len(pygame.event.get(pygame.QUIT))>0:
-            quitgame(player.score)
+            quitgame()
 
         #Rendering
         screen.blit(fondo,(0,0))
@@ -725,12 +774,12 @@ def main():
             screen.blit(GODSHIP,player.rect)
         else:
             screen.blit(player.image,player.rect)
-            
+        screen.blit(boss.image,boss.rect)   
         for b in boss.balas:
             screen.blit(b.image,(b.x-8,b.y-8))
         for m in boss.minions:
             screen.blit(m.image,(m.x-16,m.y-16))
-        screen.blit(boss.image,boss.rect)
+        
         #UI
         for i in range(5):
             screen.fill(colorbarra[i],boss.hpbar[i])        
@@ -739,26 +788,109 @@ def main():
 
 #------------------------------------------------------
 
-def quitgame(score,whodied=None):
+
+def quitgame(whodied=None):
     pygame.mixer.music.fadeout(1000)
     chanel = pygame.mixer.Channel(3)
+
+    global player
+    global clock
+    global screen
+    global fondo
+    global boss
+    global colorbarra
+    global lasercolor
+    global focuscolor
+    global GODSHIP
+    global key
     
     if(whodied == "player"):
         boom = load_sound("se_pldead00.wav",SONIDO_DIR)
         boom.set_volume(0.2)
         chanel.play(boom)
+        bum = blast(player.rect.centerx,player.rect.centery)
+
+        while(True):
+            clock.tick(60)
+            #Rendering
+            screen.blit(fondo,(0,0))            
+                
+            for b in boss.balas:
+                screen.blit(b.image,(b.x-8,b.y-8))
+            for m in boss.minions:
+                screen.blit(m.image,(m.x-16,m.y-16))
+            screen.blit(boss.image,boss.rect)
+            #UI
+            for i in range(5):
+                screen.fill(colorbarra[i],boss.hpbar[i])
+            if(bum.animate()):
+                break
+            
+            pygame.display.flip()
+        
     elif(whodied == "boss"):
+        player.score += 500000
         boom = load_sound("se_playerdead.wav",SONIDO_DIR)
-        boom.set_volume(0.2)
+        boom.set_volume(0.4)
         chanel.play(boom)
 
+        bum = blast(boss.rect.centerx,boss.rect.centery,False)
 
-    
-    while chanel.get_busy():
+        while(True):
+            clock.tick(60)
+            #Rendering
+
+            # Posibles entradas del teclado y mouse
+            key.check()
+
+            # Dejamos al jugador moverse y disparar
+            player.keyinput(key) 
+            
+            screen.blit(fondo,(0,0))
+            if(player.lazor):
+                for l in range(4):
+                    if(player.focused):
+                        screen.fill(focuscolor[l],player.laser[l])
+                    else:
+                        screen.fill(lasercolor[l],player.laser[l])        
+            if GOD:
+                screen.blit(GODSHIP,player.rect)
+            else:
+                screen.blit(player.image,player.rect)
+                
+            if(bum.animate()):
+                break
+            
+            pygame.display.flip()
+
+        while(chanel.get_busy()):
+            clock.tick(60)
+            #Rendering
+
+            # Posibles entradas del teclado y mouse
+            key.check()
+
+            # Dejamos al jugador moverse y disparar
+            player.keyinput(key) 
+            
+            screen.blit(fondo,(0,0))
+            if(player.lazor):
+                for l in range(4):
+                    if(player.focused):
+                        screen.fill(focuscolor[l],player.laser[l])
+                    else:
+                        screen.fill(lasercolor[l],player.laser[l])        
+            if GOD:
+                screen.blit(GODSHIP,player.rect)
+            else:
+                screen.blit(player.image,player.rect)
+
+            pygame.display.flip()
+
+    while(chanel.get_busy()):
         pass
-
         
-    print("Puntaje obtenido: "+str(score))
+    print("Puntaje obtenido: "+str(player.score))
     sys.exit(0)    
  
 if __name__ == "__main__":
