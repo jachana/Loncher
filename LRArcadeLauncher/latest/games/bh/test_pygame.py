@@ -35,6 +35,7 @@ SCREEN_HEIGHT = 480
 IMG_DIR = "./imagenes"
 SONIDO_DIR = "./sonidos"
 EPIC = True
+GOD = False
  
 # ------------------------------
 # Funciones utiles
@@ -76,13 +77,13 @@ class bala(pygame.sprite.Sprite):
     "Balas"
     def __init__(self,x,y,spdx,spdy,timer,color):
         pygame.sprite.Sprite.__init__(self)
-        print ("Bala creada")
         self.image = load_image("bala"+str(color)+".png",IMG_DIR,True)
         self.x = x
         self.y = y
         self.speed = [spdx,spdy]
         self.time = timer*60
         self.accel = [0,0]
+        self.max = 5
 
     def colision(self, objetivo):
         pass ##TODO
@@ -98,7 +99,7 @@ class bala(pygame.sprite.Sprite):
         oldspd = self.absspeed()
         self.speed[0]+=self.accel[0]
         self.speed[1]+=self.accel[1]
-        if(self.absspeed() > oldspd and self.absspeed()>5):
+        if(self.absspeed() > oldspd and self.absspeed()>self.max):
             self.speed[0]-=self.accel[0]
             self.speed[1]-=self.accel[1]
         
@@ -128,7 +129,13 @@ class jugador(pygame.sprite.Sprite):
         #Indica si el jugador esta disparando o no
         self.lazor = False
         #Cargamos el sprite del jugador
-        self.image = load_image("nave.png",IMG_DIR,True)
+        self.normal = load_image("nave.png",IMG_DIR,True)
+        self.focus = load_image("shipfocus.png",IMG_DIR,True)
+        #Inicialmente no esta enfocando
+        self.speed = 6
+        self.dmg = 0.5
+        self.focused = False
+        self.image = self.normal        
         #Establecemos las coordenadas del jugador 
         self.rect = self.image.get_rect()
         self.rect.centerx = SCREEN_WIDTH /2
@@ -138,9 +145,9 @@ class jugador(pygame.sprite.Sprite):
 
     def checkdmg(self, boss):
         for b in boss.balas:
-            if(math.sqrt((self.rect.centerx-b.x)*(self.rect.centerx-b.x)+(self.rect.centery+7-b.y)*(self.rect.centery+7-b.y))<8):
+            if(math.sqrt((self.rect.centerx-b.x)*(self.rect.centerx-b.x)+(self.rect.centery+7-b.y)*(self.rect.centery+7-b.y))<10):
                 return True
-            if(math.sqrt((self.rect.centerx-b.x)*(self.rect.centerx-b.x)+(self.rect.centery+7-b.y)*(self.rect.centery+7-b.y))<16):
+            if(math.sqrt((self.rect.centerx-b.x)*(self.rect.centerx-b.x)+(self.rect.centery+7-b.y)*(self.rect.centery+7-b.y))<18):
                 self.score+=1
         return False
 
@@ -154,11 +161,23 @@ class jugador(pygame.sprite.Sprite):
         else:
             if(self.lazor):
                 self.lazor = False
+
+        #Si esta enfocando, enfocar
+        if(key.SHIFT):
+            if(not self.focused):
+                self.focused = True
+                self.image = self.focus
+                self.speed /= 2
+                self.dmg *= 2
+        else:
+            if(self.focused):
+                self.focused = False
+                self.image = self.normal
+                self.speed *= 2
+                self.dmg /= 2
         
-        #velocidad del jugador
-        s = 3
         #velocidad diagonal
-        ds = math.cos(math.pi/4)*s
+        ds = math.cos(math.pi/4)*self.speed
 
         #Coordenadas anteriores por si se sale de la pantalla
 
@@ -177,7 +196,7 @@ class jugador(pygame.sprite.Sprite):
                 self.rect.centery-=ds
                 self.rect.centerx+=ds
             else:
-                self.rect.centery-=s
+                self.rect.centery-=self.speed
                 
         elif(key.DOWN):
 
@@ -188,15 +207,15 @@ class jugador(pygame.sprite.Sprite):
                 self.rect.centerx+=ds
                 self.rect.centery+=ds
             else:
-                self.rect.centery+=s
+                self.rect.centery+=self.speed
                 
         elif(key.LEFT):
             if(key.RIGHT):
                 pass
             else:
-                self.rect.centerx-=s
+                self.rect.centerx-=self.speed
         elif(key.RIGHT):
-            self.rect.centerx += s
+            self.rect.centerx += self.speed
 
         #Si la nave salio de la pantalla con ese movimiento... el movimiento se cancela
         if not screen.get_rect().contains(self.rect):
@@ -234,9 +253,15 @@ class jefe(pygame.sprite.Sprite):
         self.rect.centerx = SCREEN_WIDTH/2
         self.rect.centery = -201
         self.tickcount = 0
-        #Creamos un contenedor para las balas que dispare el jefe
+        #Cargamos un efecto de sonido
+        self.endcard = load_sound("se_tan02.wav",SONIDO_DIR)
+        self.endcard.set_volume(0.5)
+        self.endcardchannel = pygame.mixer.Channel(2)        
+        #Creamos un contenedor para las balas y minions que genere el jefe
         self.balas = []
+        self.minions = []
         self.routine = 1
+        self.flag = False
 
     ##Dramatica entrada del jefe a la pantalla, avisa cuando esta en posicion
     def enter(self):
@@ -250,12 +275,16 @@ class jefe(pygame.sprite.Sprite):
     def checkdmg(self,player):
         #Si el jugador tiene el laser encendido y este esta en el camino del jefe
         if(player.lazor and self.rect.collidelist(player.laser)>=0):
-            self.hp -= 1.5
-            player.score +=1.5
+            self.hp -= player.dmg
+            #El jugador gana mas puntos si le pega al jefe sin enfocar
+            player.score += 147
             #Actualizamos la barra
             for bar in self.hpbar:
                 bar.width = self.hp//10         
 
+
+    
+            
     ##El jefe hace algo segun en cuanto HP se encuentra
     def tick(self):
         
@@ -267,6 +296,7 @@ class jefe(pygame.sprite.Sprite):
                 self.balas.pop(cont) #La eliminamos de la lista
             else:
                 cont+=1 #Si no, pasamos a la bala siguiente
+        
 
 
         #Segun que tan debil se encuentra, que es lo que hace
@@ -282,12 +312,17 @@ class jefe(pygame.sprite.Sprite):
             self.routine_5()
         else:
             self.routine_6()
-            
-    def routine_2(self):
-        if(self.routine == 1):
+
+
+    def change_routine(self,ID):
+        if(self.routine == ID-1):
             self.balas = []
-            self.routine = 2
+            self.minions = []
+            self.routine = ID
             self.tickcount = 0
+            self.endcardchannel.play(self.endcard)
+            
+    def routine_1(self):
             
         self.tickcount +=1
         a = 5
@@ -298,47 +333,28 @@ class jefe(pygame.sprite.Sprite):
         y = self.rect.centery-math.sin(mu)*r-20
         spdy = spd*math.sin(mu)
         spdx = spd*math.cos(mu)
-        bullet = bala(x,y,spdx,spdy,57,6)
+        bullet = bala(x,y,spdx,spdy,4,6)
         self.balas.append(bullet)        
 
-    def routine_1(self):
+    def routine_2(self):
         
-
+        self.change_routine(2)
+            
         self.tickcount +=1
         a = 5
         r = 1
-        spd = 3
-        mu = math.sin(self.tickcount)*a
-        x = self.rect.centerx+math.cos(mu)*r
-        y = self.rect.centery-math.sin(mu)*r-20
-        spdy = spd*math.sin(mu)
-        spdx = spd*math.cos(mu)
-        bullet = bala(x,y,spdx,spdy,4,1)
-        self.balas.append(bullet)
-
-    def routine_4(self):
-        if(self.routine == 2):
-            self.balas = []
-            self.routine = 3
-            self.tickcount = 0
-            
-        self.tickcount +=1
-        a = 25
-        r = 260*math.sin(self.tickcount*math.pi/360)
-        spd = 3
+        spd = 4
         mu = self.tickcount*a
         x = self.rect.centerx+math.cos(mu)*r
         y = self.rect.centery-math.sin(mu)*r-20
         spdy = spd*math.sin(mu)
         spdx = spd*math.cos(mu)
-        bullet = bala(x,y,spdx,spdy,7,10)
+        bullet = bala(x,y,spdx,spdy,5,14)
+        bullet.accel = [0,-0.1]
         self.balas.append(bullet)
 
     def routine_3(self):
-        if(self.routine == 2):
-            self.balas = []
-            self.routine = 3
-            self.tickcount = 0
+        self.change_routine(3)
             
         self.tickcount +=1
         a = 24
@@ -363,13 +379,125 @@ class jefe(pygame.sprite.Sprite):
         bullet = bala(x,y,spdx,spdy,4,8)
         self.balas.append(bullet)
 
-    def routine_5(self):
-        pass
-    def routine_6(self):
-        pass
-                
-                
+    def routine_4(self):
+        self.change_routine(4)
+
+        a = 25
+        r = 260*math.sin(self.tickcount*math.pi/360)
+        spd = 3
+        mu = self.tickcount*a
+
+        if(len(self.minions)>0):
+            self.minions[0].radius = 260*math.sin(self.tickcount*math.pi/360)
+            self.minions[0].update(self.rect.centerx,self.rect.centery-20)
+        else:
+            mi = minion(self.rect.centerx,self.rect.centery-20,mu,100,25,5)            
+            self.minions.append(mi)
             
+        self.tickcount +=1
+        
+        x = self.rect.centerx+math.cos(mu)*r
+        y = self.rect.centery-math.sin(mu)*r-20
+        spdy = spd*math.sin(mu)
+        spdx = spd*math.cos(mu)
+        bullet = bala(x,y,spdx,spdy,7,10)
+        self.balas.append(bullet)
+
+    
+
+    def routine_5(self):
+        self.change_routine(5)
+
+        
+        
+        if(len(self.minions) > 0):
+            for m in self.minions:
+                spdx = self.rect.centerx
+                spdy = self.rect.centery
+                m.update(self.rect.centerx,self.rect.centery)
+
+                spdx-= m.x
+                spdy-= m.y
+
+                mod = math.sqrt((spdx)**2+(spdy)**2)
+
+                spdx /= mod
+                spdy /= mod
+                mult = 2
+                bullet = bala(m.x,m.y,-spdx*mult,spdy*mult,4,5)
+                self.balas.append(bullet)
+        else:
+            n = 3
+            for i in range(n):
+                mi = minion(self.rect.centerx,self.rect.centery,(2*math.pi/n)*i,20,math.pi/30,2)
+                mi.accel = math.pi/4000
+                self.minions.append(mi)     
+
+        self.tickcount +=1
+        
+    def routine_6(self):
+        self.change_routine(6)
+
+        if(len(self.minions) > 0):
+            for m in self.minions:
+                #Primero enviamos a los minions a rodear al jugador
+                if(not self.flag):
+                    pass
+                else:
+                    spdx = self.rect.centerx
+                    spdy = self.rect.centery
+                    m.update(self.rect.centerx,self.rect.centery)
+
+                    spdx-= m.x
+                    spdy-= m.y
+
+                    mod = math.sqrt((spdx)**2+(spdy)**2)
+
+                    spdx /= mod
+                    spdy /= mod
+                    mult = 2
+                    bullet = bala(m.x,m.y,-spdx*mult,spdy*mult,4,5)
+                    self.balas.append(bullet)
+        else:
+            n = 10
+            for i in range(n):
+                mi = minion(self.rect.centerx,self.rect.centery,(2*math.pi/n)*i,0,math.pi/30,0)
+                self.minions.append(mi)     
+
+        self.tickcount +=1
+        
+        
+  
+                
+                
+#-------------------------------------------------------------
+
+### Representa los minion que invoca el jefe
+class minion(pygame.sprite.Sprite):
+    
+    def __init__(self,cx,cy,a,r,spd,color):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = load_image("bala"+str(color%8 + 17)+".png",IMG_DIR,True)
+        self.radius = r
+        self.alpha = a
+        self.cx = cx
+        self.cy = cy
+        self.x = self.cx + self.radius*math.cos(self.alpha)
+        self.y = self.cy - self.radius*math.sin(self.alpha)
+        self.speed = spd
+        self.accel = 0
+
+    ##Actualiza la posicion del minion segun sus parametros.
+    def update(self,x,y):
+        self.cx = x
+        self.cy = y
+        self.speed+=self.accel
+        self.alpha+=self.speed
+        self.x = self.cx + self.radius*math.cos(self.alpha)
+        self.y = self.cy - self.radius*math.sin(self.alpha)
+        
+
+    
 
 
 #-----------------------------------
@@ -386,6 +514,7 @@ class keyboard():
         self.LEFT = False
         self.RIGHT = False
         self.SPACE = False
+        self.SHIFT = False
 
     ##Revisa cuando se aprieta y cuando se suelta una tecla para recordar que teclas estan presionadas en que momento
     def check(self):
@@ -406,6 +535,11 @@ class keyboard():
                 self.RIGHT = True
             elif keydown.key == K_z:
                 self.SPACE = True
+            elif keydown.key == K_LSHIFT:
+                self.SHIFT = True
+            elif keydown.key == K_DELETE:
+                global GOD
+                GOD = not GOD
 
         for keyup in keyups:
 
@@ -418,17 +552,20 @@ class keyboard():
             elif keyup.key == K_RIGHT:
                 self.RIGHT = False
             elif keyup.key == K_z:
-                self.SPACE = False            
+                self.SPACE = False
+            elif keyup.key == K_LSHIFT:
+                self.SHIFT = False
 
 # ------------------------------
 # Funcion principal del juego
 # ------------------------------
 
+
  
 def main():
     #Se inicializa la libreria
-    pygame.init()
-    pygame.mixer.init()
+    pygame.mixer.pre_init(44100, -16, 1, 4096) #Para minimizar el delay de sonido
+    pygame.init()    
 
     global screen    
     # creamos la ventana y le indicamos un titulo:
@@ -436,13 +573,14 @@ def main():
     pygame.display.set_caption("BulletHell POC")
     fondo = load_image("espeis.png",IMG_DIR,False)    
 
+    GODSHIP = load_image("shipa.png",IMG_DIR,True)
+    
     #Instanciamos al jugador y al jefe
     player = jugador()
     boss = jefe()
 
     #?????????
-    clock = pygame.time.Clock()    
-    pygame.key.set_repeat(1, 25)  # Activa repeticion de teclas (???)
+    clock = pygame.time.Clock()
 
     #Escondemos el mouse
     pygame.mouse.set_visible(False)
@@ -450,6 +588,7 @@ def main():
     #Establecemos los colores de los rectangulos que se dibujaran a mano (laser y barra de Hp del jefe)
     colorbarra = [Color(255,0,0,0),Color(220,0,0,0),Color(160,0,0,0),Color(100,0,0,0),Color(40,0,0,0)]
     lasercolor = [Color(0,0,255,0),Color(135,206,250,0),Color(255,255,255,0),Color(255,255,255,0)]
+    focuscolor = [Color(0,0,0,0),Color(100,0,100,0),Color(221,160,221,0),Color(255,255,255,0)]
 
     #Creamos el teclado
     key = keyboard()
@@ -464,7 +603,7 @@ def main():
 
     #Se carga y reproduce la musica para la epic intro... epicamente
     pygame.mixer.music.load(os.path.join(SONIDO_DIR,"space_0.mp3"))
-    pygame.mixer.music.set_volume(0.7)
+    pygame.mixer.music.set_volume(1)
     pygame.mixer.music.play(0)
     
     intro = 0
@@ -486,8 +625,15 @@ def main():
         screen.blit(fondo,(0,intro-360)) #Nos acercamos hacia el horizonte
         if(player.lazor):
             for l in range(4):
-                screen.fill(lasercolor[l],player.laser[l]) 
-        screen.blit(player.image,player.rect)
+                if(player.focused):
+                    screen.fill(focuscolor[l],player.laser[l])
+                else:
+                    screen.fill(lasercolor[l],player.laser[l])
+        if GOD:
+            screen.blit(GODSHIP,player.rect)
+        else:
+            screen.blit(player.image,player.rect)
+        
         screen.blit(boss.image,boss.rect)
         pygame.display.flip()
 
@@ -501,7 +647,7 @@ def main():
             if(boss.enter()): #Y le decimos al jefazo que entre
                 break
         else:
-            intro += 2 #A que velocidad se scrollea la pantalla
+            intro += 0.5 #A que velocidad se scrollea la pantalla
 
 #--------------------------------
  
@@ -519,9 +665,11 @@ def main():
 
         #Analísis de colisiones
         boss.checkdmg(player)
-        
-        if(player.checkdmg(boss)):
-            quitgame(player.score)
+
+        if not GOD:
+            if(player.checkdmg(boss)):
+                boss.balas = []
+                quitgame(player.score,"player")
         
         #Condiciones de fin
         if boss.hp <= 0:            
@@ -542,12 +690,21 @@ def main():
         screen.blit(fondo,(0,0))
         if(player.lazor):
             for l in range(4):
-                screen.fill(lasercolor[l],player.laser[l])
+                if(player.focused):
+                    screen.fill(focuscolor[l],player.laser[l])
+                else:
+                    screen.fill(lasercolor[l],player.laser[l])        
+        if GOD:
+            screen.blit(GODSHIP,player.rect)
+        else:
+            screen.blit(player.image,player.rect)
+            
         for b in boss.balas:
             screen.blit(b.image,(b.x-8,b.y-8))
-        screen.blit(player.image,player.rect)
+        for m in boss.minions:
+            screen.blit(m.image,(m.x-16,m.y-16))
         screen.blit(boss.image,boss.rect)
-        
+        #UI
         for i in range(5):
             screen.fill(colorbarra[i],boss.hpbar[i])        
         
@@ -555,7 +712,21 @@ def main():
 
 #------------------------------------------------------
 
-def quitgame(score):    
+def quitgame(score,whodied=None):
+    pygame.mixer.music.fadeout(1000)
+    chanel = pygame.mixer.Channel(3)
+    
+    if(whodied == "player"):
+        boom = load_sound("se_pldead00.wav",SONIDO_DIR)
+        boom.set_volume(0.2)
+        chanel.play(boom)
+
+
+    
+    while chanel.get_busy():
+        pass
+
+        
     print("Puntaje obtenido: "+str(score))
     sys.exit(0)    
  
