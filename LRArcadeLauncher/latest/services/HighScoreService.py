@@ -36,22 +36,22 @@ class HighScoreServiceProvider:
 		self._root = self._tree.getroot()
 		self._scorelist = []
 		try:
-			print("Init main block begin")
+			#print("Init main block begin")
 			self._tree = ET.ElementTree(None,"./data/scores/"+str(self._code)+".xml")
 			self._root = self._tree.getroot()
 			for score in self._root.findall("Score"):
 				self._scorelist.append( (score.get("points"),score.get("name")) )
-                        print("Pre-sort: "+str(self._scorelist))
+                        #print("Pre-sort: "+str(self._scorelist))
 			self._scorelist.sort()
-			print("sorted list, list: "+str(self._scorelist))
+			#print("sorted list, list: "+str(self._scorelist))
 			if len(self._scorelist) > max:
 				nuescores = []
 				for i in range(0,max):
                                         nuescores.append(self._scorelist[i])
                                 self._scorelist = nuescores
-			print("Init main block end")
+			#print("Init main block end")
 		except Exception as e:
-			print("Init Exception block")
+			#print("Init Exception block")
 			import os
 			basedir = os.path.dirname("./data/scores/"+str(self._code)+".xml")
 			if not os.path.exists(basedir):
@@ -62,9 +62,9 @@ class HighScoreServiceProvider:
 			self._tree.write("./data/scores/"+str(self._code)+".xml")
 			if self._scorelist == None:
                                 self._scorelist = []
-			print("Init exception block end")
-			print("Exception args:")
-			print(str(e.args))
+			#print("Init exception block end")
+			#print("Exception args:")
+			#print(str(e.args))
 		
 	def register(self,score,name):
 		"""Registra un score score para el jugador name, si esta en el top max"""
