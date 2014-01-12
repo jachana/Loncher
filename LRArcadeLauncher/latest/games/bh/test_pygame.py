@@ -85,9 +85,6 @@ class bala(pygame.sprite.Sprite):
         self.accel = [0,0]
         self.max = 5
 
-    def colision(self, objetivo):
-        pass ##TODO
-
     def absspeed(self):
         return math.sqrt(self.speed[0]**2+self.speed[1]**2)
 
@@ -442,11 +439,16 @@ class jefe(pygame.sprite.Sprite):
             for m in self.minions:
                 #Primero enviamos a los minions a rodear al jugador
                 if(not self.flag):
-                    pass
+                    m.radius = self.tickcount*3
+                    m.update(self.rect.centerx,self.rect.centery+self.tickcount)
+
+                    if(self.tickcount > 180):
+                        self.flag = True
                 else:
                     spdx = self.rect.centerx
-                    spdy = self.rect.centery
-                    m.update(self.rect.centerx,self.rect.centery)
+                    spdy = self.rect.centery + 180                  
+
+                    m.update(self.rect.centerx,self.rect.centery+180)
 
                     spdx-= m.x
                     spdy-= m.y
@@ -455,16 +457,39 @@ class jefe(pygame.sprite.Sprite):
 
                     spdx /= mod
                     spdy /= mod
-                    mult = 2
-                    bullet = bala(m.x,m.y,-spdx*mult,spdy*mult,4,5)
+                    mult = 25
+                    bullet = bala(m.x,m.y,-spdx*mult,spdy*mult,0.3,16)
                     self.balas.append(bullet)
+
+                    if(m.radius > 40):
+                        m.radius-=2
+                    elif(self.tickcount%15 == 0):
+                        global player
+                        spdx = player.rect.centerx-self.rect.centerx
+                        spdy = player.rect.centery-self.rect.centery
+
+                        mod = math.sqrt((spdx)**2+(spdy)**2)
+
+                        spdx /= mod
+                        spdy /= mod
+
+                        mult = 3
+                        bullet = bala(self.rect.centerx,self.rect.centery,spdx*mult,-spdy*mult,2,15)
+                        self.balas.append(bullet)
+                    
+                    
+                        
         else:
             n = 10
             for i in range(n):
-                mi = minion(self.rect.centerx,self.rect.centery,(2*math.pi/n)*i,0,math.pi/30,0)
+                k = -1
+                if(i%2==0):
+                    k*=-1
+                
+                mi = minion(self.rect.centerx,self.rect.centery,(2*math.pi/n)*i,0,math.pi/140*k,0)
                 self.minions.append(mi)     
 
-        self.tickcount +=1
+        self.tickcount += 1
         
         
   
@@ -477,6 +502,7 @@ class minion(pygame.sprite.Sprite):
     
     def __init__(self,cx,cy,a,r,spd,color):
         pygame.sprite.Sprite.__init__(self)
+        self.color = color
         self.image = load_image("bala"+str(color%8 + 17)+".png",IMG_DIR,True)
         self.radius = r
         self.alpha = a
@@ -576,6 +602,7 @@ def main():
     GODSHIP = load_image("shipa.png",IMG_DIR,True)
     
     #Instanciamos al jugador y al jefe
+    global player
     player = jugador()
     boss = jefe()
 
@@ -673,7 +700,7 @@ def main():
         
         #Condiciones de fin
         if boss.hp <= 0:            
-            quitgame(player.score)
+            quitgame(player.score,"boss")
             
         #Posibles entradas del teclado y mouse
         key.check()
@@ -718,6 +745,10 @@ def quitgame(score,whodied=None):
     
     if(whodied == "player"):
         boom = load_sound("se_pldead00.wav",SONIDO_DIR)
+        boom.set_volume(0.2)
+        chanel.play(boom)
+    elif(whodied == "boss"):
+        boom = load_sound("se_playerdead.wav",SONIDO_DIR)
         boom.set_volume(0.2)
         chanel.play(boom)
 
