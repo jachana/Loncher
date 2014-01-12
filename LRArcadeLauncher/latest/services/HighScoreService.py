@@ -33,6 +33,7 @@ class HighScoreServiceProvider:
 		self._activated = True
 		self._tree = ET.ElementTree()
 		self._root = self._tree.getroot()
+		self._scorelist = []
 		try:
 			print("Init main block begin")
 			self._tree = ET.ElementTree(None,"./data/scores/"+str(self._code)+".xml")
@@ -41,7 +42,7 @@ class HighScoreServiceProvider:
 				self._scorelist.append( (score.get("points"),score.get("name")) )
 			self._scorelist = self._scorelist.sort()
 			if len(self._scorelist) > max:
-				#self._scorelist = self._scorelist[0:max]
+				self._scorelist = self._scorelist[max:]
                                 pass
 			print("Init main block end")
 		except Exception:
@@ -54,6 +55,8 @@ class HighScoreServiceProvider:
 			self._root = ET.Element("Scores")
 			self._tree = ET.ElementTree(self._root)
 			self._tree.write("./data/scores/"+str(self._code)+".xml")
+			if self._scorelist == None:
+                                self._scorelist = []
 			print("Init exception block end")
 		
 	def register(self,score,name):
