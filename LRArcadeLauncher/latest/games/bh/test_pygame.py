@@ -15,7 +15,7 @@ import sys
 import os
 import StartBase
 import math
-import random
+import string
 
 
 
@@ -530,6 +530,32 @@ class minion(pygame.sprite.Sprite):
 # Clases de Utility
 #-----------------------------------
 
+
+###Clase encargada de manejar los puntajes
+class score():
+
+    def __init__(self,scorum,isplayer):
+        self.isplayer = isplayer
+        split = scorum.split(" ")
+        let = split[0]
+        self.initials=[let[0],let[1],let[2]]
+        self.score = int(split[1])
+
+    def __str__(self):
+        num = str(self.score)
+
+        while(len(num)<7):
+            num = "0"+num
+        
+        return str(self.initials[0]+self.initials[1]+self.initials[2])+" "+str(num)
+        
+
+    def __eq__(self,other):
+        return self.score == other.score
+
+    def __lt__(self,other):
+        return self.score < other.score
+
 ###Clase encargada de revisar los eventos del teclado
 class keyboard():
 
@@ -550,7 +576,7 @@ class keyboard():
         for keydown in keydowns:
 
             if keydown.key == K_ESCAPE:
-                quitgame()
+                quitgame("now")
             elif keydown.key == K_UP:
                 self.UP = True
             elif keydown.key == K_DOWN:
@@ -677,6 +703,9 @@ def main():
 # Epic Intro
 #-----------
 
+    #Score tester
+    ##quitgame("")
+
     #Se carga y reproduce la musica para la epic intro... epicamente
     pygame.mixer.music.load(os.path.join(SONIDO_DIR,"space_0.mp3"))
     pygame.mixer.music.set_volume(1)
@@ -723,7 +752,7 @@ def main():
             if(boss.enter()): #Y le decimos al jefazo que entre
                 break
         else:
-            intro += 2 #A que velocidad se scrollea la pantalla
+            intro += 5 #A que velocidad se scrollea la pantalla
 
 #--------------------------------
  
@@ -790,108 +819,248 @@ def main():
 
 
 def quitgame(whodied=None):
-    pygame.mixer.music.fadeout(1000)
-    chanel = pygame.mixer.Channel(3)
+    if(whodied != "now"):
+        pygame.mixer.music.fadeout(1000)
+        chanel = pygame.mixer.Channel(3)
 
-    global player
-    global clock
-    global screen
-    global fondo
-    global boss
-    global colorbarra
-    global lasercolor
-    global focuscolor
-    global GODSHIP
-    global key
-    
-    if(whodied == "player"):
-        boom = load_sound("se_pldead00.wav",SONIDO_DIR)
-        boom.set_volume(0.2)
-        chanel.play(boom)
-        bum = blast(player.rect.centerx,player.rect.centery)
-
-        while(True):
-            clock.tick(60)
-            #Rendering
-            screen.blit(fondo,(0,0))            
-                
-            for b in boss.balas:
-                screen.blit(b.image,(b.x-8,b.y-8))
-            for m in boss.minions:
-                screen.blit(m.image,(m.x-16,m.y-16))
-            screen.blit(boss.image,boss.rect)
-            #UI
-            for i in range(5):
-                screen.fill(colorbarra[i],boss.hpbar[i])
-            if(bum.animate()):
-                break
-            
-            pygame.display.flip()
+        global player
+        global clock
+        global screen
+        global fondo
+        global boss
+        global colorbarra
+        global lasercolor
+        global focuscolor
+        global GODSHIP
+        global key
         
-    elif(whodied == "boss"):
-        player.score += 500000
-        boom = load_sound("se_playerdead.wav",SONIDO_DIR)
-        boom.set_volume(0.4)
-        chanel.play(boom)
+        if(whodied == "player"):
+            boom = load_sound("se_pldead00.wav",SONIDO_DIR)
+            boom.set_volume(0.2)
+            chanel.play(boom)
+            bum = blast(player.rect.centerx,player.rect.centery)
 
-        bum = blast(boss.rect.centerx,boss.rect.centery,False)
+            while(True):
+                clock.tick(60)
+                #Rendering
+                screen.blit(fondo,(0,0))            
 
-        while(True):
-            clock.tick(60)
-            #Rendering
-
-            # Posibles entradas del teclado y mouse
-            key.check()
-
-            # Dejamos al jugador moverse y disparar
-            player.keyinput(key) 
-            
-            screen.blit(fondo,(0,0))
-            if(player.lazor):
-                for l in range(4):
-                    if(player.focused):
-                        screen.fill(focuscolor[l],player.laser[l])
-                    else:
-                        screen.fill(lasercolor[l],player.laser[l])        
-            if GOD:
-                screen.blit(GODSHIP,player.rect)
-            else:
-                screen.blit(player.image,player.rect)
+                screen.blit(boss.image,boss.rect)
+                for b in boss.balas:
+                    screen.blit(b.image,(b.x-8,b.y-8))
+                for m in boss.minions:
+                    screen.blit(m.image,(m.x-16,m.y-16))
                 
-            if(bum.animate()):
-                break
+                #UI
+                for i in range(5):
+                    screen.fill(colorbarra[i],boss.hpbar[i])
+                if(bum.animate()):
+                    break
+                
+                pygame.display.flip()
             
-            pygame.display.flip()
+        elif(whodied == "boss"):
+            player.score += 500000
+            boom = load_sound("se_playerdead.wav",SONIDO_DIR)
+            boom.set_volume(0.4)
+            chanel.play(boom)
+
+            bum = blast(boss.rect.centerx,boss.rect.centery,False)
+
+            while(True):
+                clock.tick(60)
+                #Rendering
+
+                # Posibles entradas del teclado y mouse
+                key.check()
+
+                # Dejamos al jugador moverse y disparar
+                player.keyinput(key) 
+                
+                screen.blit(fondo,(0,0))
+                if(player.lazor):
+                    for l in range(4):
+                        if(player.focused):
+                            screen.fill(focuscolor[l],player.laser[l])
+                        else:
+                            screen.fill(lasercolor[l],player.laser[l])        
+                if GOD:
+                    screen.blit(GODSHIP,player.rect)
+                else:
+                    screen.blit(player.image,player.rect)
+                    
+                if(bum.animate()):
+                    break
+                
+                pygame.display.flip()
+
+            while(chanel.get_busy()):
+                clock.tick(60)
+                #Rendering
+
+                # Posibles entradas del teclado y mouse
+                key.check()
+
+                # Dejamos al jugador moverse y disparar
+                player.keyinput(key) 
+                
+                screen.blit(fondo,(0,0))
+                if(player.lazor):
+                    for l in range(4):
+                        if(player.focused):
+                            screen.fill(focuscolor[l],player.laser[l])
+                        else:
+                            screen.fill(lasercolor[l],player.laser[l])        
+                if GOD:
+                    screen.blit(GODSHIP,player.rect)
+                else:
+                    screen.blit(player.image,player.rect)
+
+                pygame.display.flip()
 
         while(chanel.get_busy()):
-            clock.tick(60)
-            #Rendering
+            pass
+#------------------------------------------------------------------
+# HIGH SCORE
+#------------------------------------------------------------------
 
-            # Posibles entradas del teclado y mouse
-            key.check()
-
-            # Dejamos al jugador moverse y disparar
-            player.keyinput(key) 
-            
-            screen.blit(fondo,(0,0))
-            if(player.lazor):
-                for l in range(4):
-                    if(player.focused):
-                        screen.fill(focuscolor[l],player.laser[l])
-                    else:
-                        screen.fill(lasercolor[l],player.laser[l])        
-            if GOD:
-                screen.blit(GODSHIP,player.rect)
-            else:
-                screen.blit(player.image,player.rect)
-
-            pygame.display.flip()
-
-    while(chanel.get_busy()):
-        pass
+        pygame.font.init()
+        size = 30
+        font = pygame.font.Font("./consola.ttf",size)
         
-    print("Puntaje obtenido: "+str(player.score))
+        fail = open("./score.txt","r")
+        scores = []
+        for f in fail:
+            scores.append(score(f.replace("\n",""),False))
+        fail.close()
+        
+        scores.append(score("--- "+str(player.score),True))
+
+        scores.sort()
+        scores.reverse()
+
+        high = False
+        index = 10
+        screen.fill(Color(0,0,0,0),Rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
+        screen.blit(font.render("HIGH SCORES",True,Color(255,255,255,0),Color(0,0,0,0)),(SCREEN_WIDTH/2-len("HIGH SCORES")*size/2+70,60))
+        for i in range(10):
+
+            color = Color(255,255,255,0)
+
+            if(scores[i].isplayer):
+                high = True
+                index = i
+                color = Color(0,155,200,0)
+
+            screen.blit(font.render(str(scores[i]),True,color,Color(0,0,0,0)),(SCREEN_WIDTH/2-len(str(scores[i]))*size/2+70,100+size*i))
+            #render(text, antialias, color, background=None)
+            #pygame.freetype.Font.render_to(screen, (0,i*20),scores[i],Color(255,255,255,0),Color(0,0,0,255))
+                
+            #render_to(surf, dest, text, fgcolor=None, bgcolor=None, style=STYLE_DEFAULT, rotation=0, size=0) -> Rect
+
+        pygame.display.flip()
+        
+#----------Name Input------------------
+        if high:
+            scores[index].initials = [" "," "," "]
+            abcd = " "+string.ascii_uppercase+string.digits
+            pointer = 0
+            charter = 0
+            enter = True
+            change = load_sound("se_select00.wav",SONIDO_DIR)
+            change.set_volume(0.1)
+            ready = load_sound("se_cancel00.wav",SONIDO_DIR)
+            ready.set_volume(0.1)
+            
+            while enter:
+                clock.tick(60)
+                screen.fill(Color(0,0,0,0),Rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
+                screen.blit(font.render("HIGH SCORES",True,Color(255,255,255,0),Color(0,0,0,0)),(SCREEN_WIDTH/2-len("HIGH SCORES")*size/2+70,60))
+                for i in range(10):
+                    color = Color(255,255,255,0)
+
+                    if(scores[i].isplayer):
+                        high = True
+                        index = i
+                        color = Color(0,155,200,0)
+
+                    screen.blit(font.render(str(scores[i]),True,color,Color(0,0,0,0)),(SCREEN_WIDTH/2-len(str(scores[i]))*size/2+70,100+size*i))
+
+                #Lectura teclado
+                keydowns = pygame.event.get(pygame.KEYDOWN)
+                
+                for k in keydowns:
+                    if k.key == K_RETURN or k.key == K_ESCAPE:
+                        enter = False
+                        ready.play(0)
+                    elif k.key == K_UP:
+                        pointer+=1
+                        if(pointer == len(abcd)):
+                            pointer = 0
+
+                        change.play(0)
+
+                        scores[index].initials[charter] = abcd[pointer]
+                    elif k.key == K_DOWN:
+                        pointer-=1
+                        if(pointer == -1):
+                            pointer = len(abcd)-1
+                        change.play(0)
+                        scores[index].initials[charter] = abcd[pointer]
+
+                    elif k.key == K_LEFT:
+                        charter -=1
+                        if(charter == -1):
+                            charter = 0
+
+                        pointer = string.find(abcd,scores[index].initials[charter])
+
+                        scores[index].initials[charter] = abcd[pointer]
+                        change.play(0)
+
+                    elif k.key == K_RIGHT or k.key == K_z:
+                        charter+=1
+                        if(charter == 3):
+                            charter = 2
+                            if(k.key == K_z):
+                                enter = False
+                                ready.play(0)
+                            
+                        pointer = string.find(abcd,scores[index].initials[charter])
+                        scores[index].initials[charter] = abcd[pointer]
+                        change.play(0)
+
+                        
+                        
+                
+                pygame.display.flip()
+#-----------------------------------------------
+
+        #Rendereamos la pantalla final
+        screen.fill(Color(0,0,0,0),Rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
+        screen.blit(font.render("HIGH SCORES",True,Color(255,255,255,0),Color(0,0,0,0)),(SCREEN_WIDTH/2-len("HIGH SCORES")*size/2+70,60))        
+        for i in range(10):
+            screen.blit(font.render(str(scores[i]),True,Color(255,255,255,0),Color(0,0,0,0)),(SCREEN_WIDTH/2-len(str(scores[i]))*size/2+70,100+size*i))
+        if not high:
+            screen.blit(font.render("YOUR SCORE: "+str(scores[10].score),True,Color(0,155,200,0),Color(0,0,0,0)),(SCREEN_WIDTH/2-len(str(scores[10]))*size/2+20,100+size*11))
+            
+        pygame.display.flip()
+        
+        global EPIC
+        while EPIC:
+            keydowns = pygame.event.get(pygame.KEYDOWN)
+            for k in keydowns:
+                if k.key == K_RETURN or k.key == K_ESCAPE or k.key == K_z:
+                    EPIC = False
+
+        fail = open("./score.txt","w")
+
+        for s in range(10):
+            fail.write(str(scores[s])+"\n")
+
+        fail.close()
+        
     sys.exit(0)    
- 
+
 if __name__ == "__main__":
     main()

@@ -4,15 +4,12 @@
 	<Code>BHI</Code>
 	<Version>100</Version>
 	<Date>21-12-2013</Date>
-	<Description>Juego de prueba para el Launcher del Arcade</Description>
+	<Description>LAUNCHER DEMO: ¡Esquiva las balas y destruye al robot!</Description>
 	<WebUpdate enable="true" repo="ftp://arcade.ing.puc.cl/games/AGT/release/latest/UpdateInfo.xml"/>
 	<MainClass name="MiJuego" file="./games/bh/test_pygame.py"/>
 	<CrashDump sendTo="jdheysen@uc.cl" prefix="[BHI Crash]"/>
 	<Authors>
-		<Author name="Jurgen Heysen"/>
 		<Author name="Vicente Errázuriz"/>
-		<Author name="Julio Chaná"/>
-		<Author name="Ricardo Aldana"/>
 	</Authors>
 	<Screenshots>
 		<Screenshot src="./games/bh/imagenes/SS1.png"/>
