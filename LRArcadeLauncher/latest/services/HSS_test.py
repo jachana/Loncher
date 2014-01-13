@@ -1,6 +1,7 @@
-import HighScoreService as HS
+
 
 def test():
+        import HighScoreService as HS
         provider = HS.factory({"max":10,"storage":"internal"},"DEM")
         print("provider inicializado")
         print("Prueba de inicializacion")

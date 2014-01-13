@@ -49,6 +49,7 @@ class HighScoreServiceProvider:
 			for score in self._root.findall("Score"):
 				self._scorelist.append( (score.get("points"),score.get("name")) )
 			self._scorelist.sort()
+			self._scorelist.reverse()
 			if len(self._scorelist) > max:
                                 nuescores = []
 				for i in range(0,max):
