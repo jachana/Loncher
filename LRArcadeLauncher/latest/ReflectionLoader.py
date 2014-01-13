@@ -3,6 +3,7 @@ import StartBase
 import multiprocessing
 import tools
 import os
+import sys
 
 def LaunchGameFromFile(filename,classname,modulename,serviceinterface):
         """Usar metodo MT mejor."""
@@ -12,6 +13,8 @@ def LaunchGameFromFile(filename,classname,modulename,serviceinterface):
         os.chdir(os.path.dirname(os.path.abspath(filename)))
         #Ahora le damos partida al juego mediate un import, instancias y go
         onlyfile = os.path.basename(filename)
+        #Ademas hacemos un append al path..
+        sys.path.append(os.getcwd())
         print(onlyfile)
         loaded = imp.load_source(modulename,onlyfile)
         toLoad = eval("loaded."+classname)()
