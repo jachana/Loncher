@@ -15,7 +15,9 @@ class ArcadeBackendFacade:
 		game = None
 		gameServiceList = None
 		for g in self._games.getList():
+			print("Analisis "+code+" = "+g.getCode())
 			if code == g.getCode():
+				print("Lucky")
 				game = g
 				gameServiceList = g.getServices()
 		if g == None:
@@ -24,7 +26,7 @@ class ArcadeBackendFacade:
 		interface = LSI.LauncherServiceInterface(code,gameServiceList,self._services)
 		#Ahora que tenemos la info, procedemos al lanzamiento
 		print("Path: "+str(os.getcwd()))
-		RL.LaunchGameFromFileMT(g.getPath(),g.getClassName(),code,interface)
+		RL.LaunchGameFromFileMT(game.getPath(),game.getClassName(),code,interface)
 
 	def getGameList(self):
 		return self._games

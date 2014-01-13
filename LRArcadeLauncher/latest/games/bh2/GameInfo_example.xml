@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0"?>
 <Game>
 	<Title>Bullet Hell Inferno 2</Title>
-	<Code>BH2</Code>
+	<Code>BHO</Code>
 	<Version>100</Version>
-	<Date>212-01-2014</Date>
+	<Date>21-01-2014</Date>
 	<Description>LAUNCHER DEMO: ¡Esquiva las balas y destruye al robot!
 		Utiliza el servicio de Highscores!</Description>
-	<MainClass name="MiJuego" file="./games/bh2/test_pygame.py"/>
+	<MainClass name="MiJuego" file="./games/bh2/test_pygame2.py"/>
 	<Authors>
 		<Author name="Vicente Errázuriz"/>
 		<Author name="Jurgen Heysen"/>
