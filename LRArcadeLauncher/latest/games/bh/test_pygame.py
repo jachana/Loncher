@@ -963,7 +963,7 @@ def quitgame(whodied=None):
 #----------Name Input------------------
         if high:
             scores[index].initials = [" "," "," "]
-            abcd = " "+string.ascii_uppercase+string.digits
+            abcd = "-"+string.ascii_uppercase+string.digits
             pointer = 0
             charter = 0
             enter = True
