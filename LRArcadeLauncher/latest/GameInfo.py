@@ -5,30 +5,33 @@ import os
 class GameInfo:
 	def __init__(self,XmlPath):
 		"""Crea un objeto que represneta la info de un juego"""
-		self._tree = ET.ElementTree()
-		self._gamename = "Juego"
-		self._gamecode = "G0"
-		self._version = 001
-		self._builddate = "01-01-2014"
-		self._description = "Descripcion"
-		self._path = "./StartBase.py"
-		self._classname = "Start"
-		self._authors = []
-		self._services = {}
-		self._adddata = []
-		self._screenshots = []
+		self._tree = ET.ElementTree() #Base del arbol
+		self._gamename = "Juego" #Nombre del juego
+		self._gamecode = "G0" #codigo unico
+		self._version = 001 #version
+		self._builddate = "01-01-2014" #fecha de build
+		self._description = "Descripcion" #Descripcion a mostrar
+		self._path = "./StartBase.py" #Path del script a correr
+		self._classname = "Start" #Nombre de la clase quye contiene a go
+		self._authors = [] #lista de autores
+		self._services = {} #Diccionario de servicios con sus parametros
+		self._adddata = [] #datos adicionales y misteriosos
+		self._screenshots = [] #paths de ss
+		#Si no estamos haciendo un objeto generico, cargamos data
 		if XmlPath != '':
 			self.loadXml(XmlPath)
 		
 	def __str__(self):
+		#Asi imprimo la lista de juegos en la CLI y en game_install tralala
 		return str(self._gamecode)+" : "+str(self._gamename)+" v"+str(self._version)+" ("+str(self._builddate)+") on "+str(self._path)+":"+str(self._classname)
 		
 	def loadXml(self,XmlPath):
 		"""Carga la informacion desde un archivo"""
-		#TODO: Cragar datos desde el Xml
+		#Cragar datos desde el Xml
 		self._tree = ET.ElementTree(None,XmlPath)
 		root = self._tree.getroot()
 		#Leemos datos basicos desde el Xml
+		#Prima el ultimo nodo si hay mas de uno
 		for name in root.findall('Title'):
 			self._gamename = name.text
 		for code in root.findall('Code'):
@@ -58,7 +61,8 @@ class GameInfo:
 		for adddata in root.findall('AdditionalData'):
 			for data in adddata:
 				self._adddata.append( (data.tag,data.attrib,data.text) )
-		
+	
+	#Seccion de gets para todas las cosas	
 	def getGameName(self):
 		return self._gamename
 		
@@ -85,9 +89,9 @@ class GameInfo:
 		
 	def getAdditionalData(self):
 		return self._adddata
+
 	def getScreenshots(self):
-                return self._screenshots
-        def getDescripcion(self):
-                return self._description
-	
-	
+		return self._screenshots
+
+	def getDescripcion(self):
+		return self._description

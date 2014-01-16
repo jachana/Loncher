@@ -27,7 +27,7 @@ class GameList:
         self._tree = ET.ElementTree(None, ListPath)
         root = self._tree.getroot()
         for game in root.findall('Game'):
-            jue = GI.GameInfo(game.get('path'))
+            jue = GI.GameInfo(game.get('path')) #por cada juego hacemos un GameInfo
             self._games.append(jue)
 
     def __str__(self):
@@ -46,7 +46,8 @@ class GameList:
         root = self._tree.getroot()
         for game in root.findall('Game'):
             if GI.GameInfo(game.get('path')).getCode() == code:
-		root.remove(game)
+                #eliminamos todas las conicidencias
+                root.remove(game)
                 for r in self._games:
                     if r.getCode() == code:
                         #Quiza quieran sacar este print

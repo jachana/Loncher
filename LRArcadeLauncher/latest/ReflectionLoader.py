@@ -16,8 +16,11 @@ def LaunchGameFromFile(filename,classname,modulename,serviceinterface):
         #Ademas hacemos un append al path..
         sys.path.append(os.getcwd())
         print(onlyfile)
+        #import dinaminco
         loaded = imp.load_source(modulename,onlyfile)
+        #creamos el objeto
         toLoad = eval("loaded."+classname)()
+        #partida
         toLoad.Go(serviceinterface)
         os.chdir(oldpath) #volvemos
 
