@@ -1,12 +1,18 @@
 import xml.etree.cElementTree as ET
 
 #Modulo que se encarga de tener algunas configuraciones del launcher
-servicePath = "./services"
-gameDir = "./games"
-gameList = "GameList_example.xml"
+global servicePath 
+servicePath= "./services"
+global gameDir 
+gameDir= "./games"
+global gameList 
+gameList= "GameList_example.xml"
 
 def Loadcfg():
 	"""Metodo que carga la configuracion del launcher"""
+	global servicePath
+	global gameDir
+	global gameList
 	try:
 		tree = ET.ElementTree(None,"ArcadeConfig.xml")
 		root = tree.getroot()
