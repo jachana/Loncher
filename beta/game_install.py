@@ -14,11 +14,11 @@ games = GL.GameList(xmlPath)
 if args.list:
 	print(games)
 if args.install:
-	games.addGame(args.install)
-	games.saveToXml(xmlPath)
+	games.add_game(args.install)
+	games.save_xml(xmlPath)
 	print("Added "+args.install+" to the registry")
 if args.uninstall:
 	print("Removing "+args.uninstall+"...")
-	games.removeByCode(args.uninstall)
-	games.saveToXml(xmlPath)
+	games.remove_code(args.uninstall)
+	games.save_xml(xmlPath)
 	print("Done.")

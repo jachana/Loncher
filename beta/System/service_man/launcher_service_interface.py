@@ -13,14 +13,6 @@ class LauncherServiceInterface:
 			except Exception:
 				print("[CRITICAL] Service "+str(serv)+" not found for "+str(code))
 
-	def getServices(self):
-		#DEPRECATED: Entrega el dict sin miramientos
-		return self.get_services()
-
-	def getService(self,name):
-		#DEPRECATED: forma segura de obtener un servicio
-		return self.get_service(name)
-
 	def get_services(self):
 		"""Entrega un diccionario con los servicios disponibles"""
 		#Entrega el dict sin miramientos

@@ -27,7 +27,7 @@ class MiJuego(StartBase.Start):
         #almacenamos el servicio para uso posterior
         global servicio
         try:
-            servicio = services.getService("HighscoreService")
+            servicio = services.get_service("HighscoreService")
         except:
             pass
         main()

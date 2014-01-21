@@ -9,7 +9,7 @@ class ArcadeCLI:
     def __init__(self,backend):
         self._back = backend
         print("Aracde CLI 1.0 Initialized")
-        print("There are "+str(len(self._back.getGameList().getList()))+" installed")
+        print("There are "+str(len(self._back.get_gamelist().get_list()))+" installed")
         print("Use list or l to get the codes")
         print("Use run CODE or r CODE to launch a game")
         print("Use help or h to read this again")
@@ -22,11 +22,11 @@ class ArcadeCLI:
         print("Use quit or q to exit")
 
     def listmsg(self):
-        print(self._back.getGameList())
+        print(self._back.get_gamelist())
 
     def runmsg(self,code):
         print("[SYSTEM] Attempting to launch "+code)
-        self._back.LoadGame(code)
+        self._back.load_game(code)
 
     def go(self):
         buf = ""

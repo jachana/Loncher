@@ -19,13 +19,13 @@ class GameInfo:
 		self._screenshots = [] #paths de ss
 		#Si no estamos haciendo un objeto generico, cargamos data
 		if XmlPath != '':
-			self.loadXml(XmlPath)
+			self.load_xml(XmlPath)
 		
 	def __str__(self):
 		#Asi imprimo la lista de juegos en la CLI y en game_install tralala
 		return str(self._gamecode)+" : "+str(self._gamename)+" v"+str(self._version)+" ("+str(self._builddate)+") on "+str(self._path)+":"+str(self._classname)
 		
-	def loadXml(self,XmlPath):
+	def load_xml(self,XmlPath):
 		"""Carga la informacion desde un archivo"""
 		#Cragar datos desde el Xml
 		self._tree = ET.ElementTree(None,XmlPath)
@@ -84,7 +84,7 @@ class GameInfo:
 	def getAuthors(self):
 		return self._authors
 		
-	def getServices(self):
+	def get_services(self):
 		return self._services
 		
 	def getAdditionalData(self):

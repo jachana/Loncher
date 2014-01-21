@@ -4,18 +4,6 @@ import tools
 import os
 import sys
 
-def LaunchGameFromFile(filename,classname,modulename,serviceinterface):
-        """DEPRECATED
-        """
-
-        launch_game(filename,classname,modulename,serviceinterface)
-
-def LaunchGameFromFileMT(filename,classname,modulename,serviceinterface):
-        """DEPRECATED
-        """
-
-        launch_game_mt(filename,classname,modulename,serviceinterface)
-
 def launch_game(filename,classname,modulename,serviceinterface):
         """Lanza un juego en el proceso actual.
         """
@@ -43,7 +31,7 @@ def launch_game_mt(filename,classname,modulename,serviceinterface):
         """
 
         #Creamos un ovjeto proceso
-        nproc = multiprocessing.Process(None,LaunchGameFromFile,"Juego",(filename,classname,modulename,serviceinterface),{})
+        nproc = multiprocessing.Process(None,launch_game,"Juego",(filename,classname,modulename,serviceinterface),{})
         #Establecemos que es un sub-proceso prioritario
         nproc.daemon = False
         #Comenzamos su ejecucion

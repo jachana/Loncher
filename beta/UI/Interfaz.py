@@ -16,7 +16,7 @@ class ArcadeGUI:
       nombre = self.lista_de_juegos.get(ACTIVE)
       gameinf = None
       root = self.root
-      for i in self._back.getGameList().getList():
+      for i in self._back.get_gamelist().get_list():
          
          print(i.getGameName())
          if i.getGameName() == nombre:
@@ -65,7 +65,7 @@ class ArcadeGUI:
       """Metodo encargado de procesar el apretar enter para lanzar un juego"""
       if self.gamecode == None:
          pass
-      self._back.LoadGame(self.gamecode)
+      self._back.load_game(self.gamecode)
 
    def __init__(self, backend):
       self._back = backend
@@ -88,7 +88,7 @@ class ArcadeGUI:
       lista_de_juegos.bind("<Return>",self.keyReturnEventHandler)
 
       lista_de_juegos.config(font = ("Lucida Console", "20"), background = "black", activestyle = 'none', foreground = 'yellow', height = '27')
-      for i in self._back.getGameList().getList():
+      for i in self._back.get_gamelist().get_list():
          lista_de_juegos.insert(END, i.getGameName())
 
       #Dejamos seleccionado uno de los juegos

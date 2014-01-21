@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-4.6.dtd">
+<!-- eric4 project file for project Loncher -->
+<!-- Saved: 2014-01-21, 19:38:06 -->
+<!-- Copyright (C) 2014 ,  -->
+<Project version="4.6">
+  <Language>en</Language>
+  <ProgLanguage mixed="0">Python</ProgLanguage>
+  <ProjectType>Console</ProjectType>
+  <Description></Description>
+  <Version>1.0.0</Version>
+  <Author></Author>
+  <Email></Email>
+  <Sources>
+    <Source>launcher_main.py</Source>
+    <Source>games/bh/gameinit.d/__init__.py</Source>
+    <Source>games/bh/test_pygame.py</Source>
+    <Source>games/bh/__init__.py</Source>
+    <Source>games/bh2/gameinit.d/__init__.py</Source>
+    <Source>games/bh2/test_pygame2.py</Source>
+    <Source>games/bh2/__init__.py</Source>
+    <Source>games/__init__.py</Source>
+    <Source>game_install.py</Source>
+    <Source>launcherinit.d/00banner.py</Source>
+    <Source>launcherinit.d/01compile.py</Source>
+    <Source>launcherinit.d/9999endbanner.py</Source>
+    <Source>launcherinit.d/__init__.py</Source>
+    <Source>services/HighScoreService.py</Source>
+    <Source>services/HSS_test.py</Source>
+    <Source>services/__init__.py</Source>
+    <Source>system/backend_facade.py</Source>
+    <Source>system/game_man/gameinfo.py</Source>
+    <Source>system/game_man/gamelist.py</Source>
+    <Source>system/game_man/reflection_loader.py</Source>
+    <Source>system/game_man/__init__.py</Source>
+    <Source>system/launcher_config.py</Source>
+    <Source>system/service_man/launcher_service_interface.py</Source>
+    <Source>system/service_man/service_discovery.py</Source>
+    <Source>system/service_man/__init__.py</Source>
+    <Source>system/StartBase.py</Source>
+    <Source>system/tools.py</Source>
+    <Source>system/__init__.py</Source>
+    <Source>tools/runparts.py</Source>
+    <Source>tools/StartBase.py</Source>
+    <Source>tools/__init__.py</Source>
+    <Source>ui/ArcadeCLI.py</Source>
+    <Source>ui/Interfaz.py</Source>
+    <Source>ui/__init__.py</Source>
+    <Source>__init__.py</Source>
+  </Sources>
+  <Forms>
+  </Forms>
+  <Translations>
+  </Translations>
+  <Resources>
+  </Resources>
+  <Interfaces>
+  </Interfaces>
+  <Others>
+  </Others>
+  <MainScript>launcher_main.py</MainScript>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES" />
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES" />
+    <FiletypeAssociation pattern="*.py" type="SOURCES" />
+    <FiletypeAssociation pattern="*.ptl" type="SOURCES" />
+  </FiletypeAssociations>
+</Project>

@@ -11,18 +11,18 @@ class ArcadeBackendFacade:
 		self._games = gl
 		self._services = services
 
-	def LoadGame(self,code):
+	def load_game(self,code):
 		"""Dado un juego seleccionado, solicita su entrada en ejecucion"""
 		game = None
 		gameServiceList = None
 		#buscamos el codigo en la lista (se supone unico)
-		for g in self._games.getList():
+		for g in self._games.get_list():
 			print("Analisis "+code+" = "+g.getCode())
 			if code == g.getCode():
 				print("Lucky")
 				#si lo encontramos guardamos la referencia
 				game = g
-				gameServiceList = g.getServices()
+				gameServiceList = g.get_services()
 		if g == None:
 			print("[CRITICAL] Attempted to launch"+code+" but wasn't on GameList")
 			return #interrumpimos el lanzamiento
@@ -32,6 +32,6 @@ class ArcadeBackendFacade:
 		print("Path: "+str(os.getcwd()))
 		RL.launch_game_mt(game.getPath(),game.getClassName(),code,interface)
 
-	def getGameList(self):
+	def get_gamelist(self):
 		#Esta lista la obtenemos en init de launcher, pero la GUI la puede necesitar antes
 		return self._games

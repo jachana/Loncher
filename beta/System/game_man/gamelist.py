@@ -37,11 +37,11 @@ class GameList:
         buf +="---END---"
         return buf
 
-    def getList(self):
+    def get_list(self):
         """Entrega la lista de objetos GameInfo"""
         return self._games
 
-    def removeByCode(self,code):
+    def remove_code(self,code):
         """Remueve un juego dado su codigo del arbol"""
         root = self._tree.getroot()
         for game in root.findall('Game'):
@@ -54,11 +54,11 @@ class GameList:
                         print("Removed "+str(r))
                         self._games.remove(r)
                 
-    def saveToXml(self,path):
+    def save_xml(self,path):
         """Explicitamente guarda la estructura de arbol actual en un .xml"""
         self._tree.write(path)
 
-    def addGame(self,path):
+    def add_game(self,path):
         """Agrega una entrada al registro"""
         root = self._tree.getroot()
         nuevo = ET.SubElement(root,'Game')
