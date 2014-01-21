@@ -1,12 +1,12 @@
 #Script de inicio del Launcher
-import System.tools as tools
-import System.GameList as GL
-import System.servicesDiscovery as SD
-import System.ArcadeConfig as AC
-import System.ArcadeBackendFacade as ABF
-import UI.ArcadeCLI as ArcadeCLI
+import system.tools as tools
+import system.game_man.gamelist as GL
+import system.service_man.service_discovery as SD
+import system.launcher_config as AC
+import system.backend_facade as ABF
+import ui.ArcadeCLI as ArcadeCLI
 import argparse
-import UI.Interfaz as Interfaz
+import ui.Interfaz as Interfaz
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c","--console", action="store_true", help="Uses CLI instead of GUI")

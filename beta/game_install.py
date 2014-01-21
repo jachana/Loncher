@@ -1,5 +1,5 @@
-import System.GameList as GL
-import System.ArcadeConfig as AC
+import system.game_man.gamelist as GL
+import system.launcher_config as AC
 import argparse
 
 parser = argparse.ArgumentParser()

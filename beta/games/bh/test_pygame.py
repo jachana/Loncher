@@ -13,7 +13,7 @@ import pygame
 from pygame.locals import *
 import sys
 import os
-import Tools.StartBase as StartBase
+import tools.StartBase as StartBase
 import math
 import string
 

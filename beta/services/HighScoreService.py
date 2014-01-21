@@ -6,7 +6,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
 
-import System.ArcadeConfig as AC
+import system.launcher_config as AC
 
 #Metodo que crea un objeto que representa el servicio a partir de
 #un diccionario de argumentos y el codigo del juego

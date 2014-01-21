@@ -1,4 +1,4 @@
-import ReflectionLoader as RL
+import game_man.reflection_loader as RL
 import game_man.gamelist as GameList
 import game_man.gameinfo
 import service_man.launcher_service_interface as LSI
@@ -30,7 +30,7 @@ class ArcadeBackendFacade:
 		interface = LSI.LauncherServiceInterface(code,gameServiceList,self._services)
 		#Ahora que tenemos la info, procedemos al lanzamiento
 		print("Path: "+str(os.getcwd()))
-		RL.LaunchGameFromFileMT(game.getPath(),game.getClassName(),code,interface)
+		RL.launch_game_mt(game.getPath(),game.getClassName(),code,interface)
 
 	def getGameList(self):
 		#Esta lista la obtenemos en init de launcher, pero la GUI la puede necesitar antes

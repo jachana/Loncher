@@ -1,6 +1,6 @@
-import System.GameList as GL
-import System.GameInfo as GI
-import System.ArcadeBackendFacade as ABF
+import system.game_man.gamelist as GL
+import system.game_man.gameinfo as GI
+import system.backend_facade as ABF
 
 #Console UI
 class ArcadeCLI:
