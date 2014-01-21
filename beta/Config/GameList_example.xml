@@ -1,0 +1,4 @@
+<GameList>
+	<Game path="./games/bh/GameInfo_example.xml" />
+	<Game path=".\games\bh2\GameInfo_example.xml" />
+</GameList>

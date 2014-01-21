@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<Game>
+	<Title>Bullet Hell Inferno 2</Title>
+	<Code>BHO</Code>
+	<Version>100</Version>
+	<Date>21-01-2014</Date>
+	<Description>LAUNCHER DEMO: ¡Esquiva las balas y destruye al robot!
+		Utiliza el servicio de Highscores!</Description>
+	<MainClass name="MiJuego" file="./games/bh2/test_pygame2.py"/>
+	<Authors>
+		<Author name="Vicente Errázuriz"/>
+		<Author name="Jurgen Heysen"/>
+	</Authors>
+	<Screenshots>
+		<Screenshot src="./games/bh2/imagenes/SS1.png"/>
+		<Screenshot src="./games/bh2/imagenes/SS2.png"/>
+		<Screenshot src="./games/bh2/imagenes/SS3.png"/>
+	</Screenshots>
+	<Services>
+		<Service name="HighscoreService" max="10" storage="global"/>
+	</Services>
+	<AdditionalData>
+	</AdditionalData>
+</Game>

@@ -1,0 +1,6 @@
+
+<Config>
+	<servicePath dir="./services"/>
+	<gameDir dir="./games"/>
+	<gameList src="./Config/GameList_example.xml"/>
+</Config>

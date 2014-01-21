@@ -1,0 +1,1 @@
+print("Finalizado init.d")
