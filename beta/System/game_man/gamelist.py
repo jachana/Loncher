@@ -1,5 +1,5 @@
 import xml.etree.cElementTree as ET
-import GameInfo as GI
+import gameinfo as GI
 
 class GameList:
     """Clase que representa la lista de juegos del arcade"""

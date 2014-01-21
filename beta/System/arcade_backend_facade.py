@@ -1,7 +1,7 @@
 import ReflectionLoader as RL
-import GameList
-import GameInfo
-import LauncherServiceInterface as LSI
+import game_man.gamelist as GameList
+import game_man.gameinfo
+import service_man.launcher_service_interface as LSI
 import os
 #Esto hace el link logico con el resto del backend del Launcher, asi la UI puede ser mas tonta
 
