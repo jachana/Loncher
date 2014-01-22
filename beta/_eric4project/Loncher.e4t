@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Tasks SYSTEM "Tasks-4.2.dtd">
+<!-- eric4 tasks file for project Loncher -->
+<!-- Saved: 2014-01-21, 20:13:16 -->
+<Tasks version="4.2">
+  <Task priority="1" completed="False" bugfix="False">
+    <Summary>TODO: poner la GUI a andar</Summary>
+    <Description></Description>
+    <Created>2014-01-21, 20:07:59</Created>
+    <Resource>
+      <Filename>launcher_main.py</Filename>
+      <Linenumber>29</Linenumber>
+    </Resource>
+  </Task>
+</Tasks>
