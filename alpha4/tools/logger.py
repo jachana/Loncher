@@ -3,9 +3,18 @@ global instance
 
 import time
 
-DEFAULT_USE_CONSOLE = True
+#Codigo desde http://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
+class _Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(_Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-class Logger:
+class Singleton(_Singleton('SingletonMeta', (object,), {})): pass
+
+#Implementacion del logger
+class Logger(Singleton):
 	"""Clase que modela registro de log.
 	"""
 
@@ -47,6 +56,12 @@ class Logger:
 		if self._writebackmode is True:
 			self.save()
 
+	def disable_writeback(self):
+		self._writebackmode = False
+
+	def enable_writeback(self):
+		self._writebackmode = True
+
 def get_logger():
 	"""Obtiene logger que ejecuta.
 	"""
@@ -65,7 +80,7 @@ def get_logger(path,allowConsole,autoWriteback):
 		instance = Logger(path,allowConsole,autoWriteback)
 	return instance
 
-instance = Logger("./LON ")
+instance = Logger("./logs/Launcher  ")
 
 if __name__ == "__main__":
 	#test

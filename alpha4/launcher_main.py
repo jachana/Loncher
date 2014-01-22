@@ -1,5 +1,5 @@
 #Script de inicio del Launcher
-import system.tools as tools
+import tools.runparts as tools
 import system.game_man.gamelist as GL
 import system.service_man.service_discovery as SD
 import system.launcher_config as AC
@@ -25,7 +25,7 @@ def LauncherMain():
 	tools.runparts("./launcherinit.d/")
 	#Obtenemos la lista de juegos
 	lista = GL.GameList(AC.gameList)
-	log.log(str(lista)) #debug
+	log.log("[INIT/init] "+str(lista)) #debug
 	#Finalizamos con lanzar la interfaz
 	#Primero inicializamos el backend
 	fac = ABF.ArcadeBackendFacade(lista,services)
