@@ -17,7 +17,7 @@ def launch_game(filename,classname,modulename,serviceinterface):
         #Ademas hacemos un append al path..
         sys.path.append(os.getcwd())
         log_ = tools.logger.Logger("./logs/Launcher ",True,True)
-        log_.disable_writeback()
+        #log_.disable_writeback()
         log_.log("[RL/lauch_game] "+onlyfile)
         #import dinaminco
         loaded = imp.load_source(modulename,onlyfile)
@@ -26,7 +26,7 @@ def launch_game(filename,classname,modulename,serviceinterface):
         #partida
         toLoad.Go(serviceinterface)
         os.chdir(oldpath) #volvemos
-        log_.enable_writeback()
+        #log_.enable_writeback()
 
 def launch_game_mt(filename,classname,modulename,serviceinterface):
         """Permite la carga de la clase classname en el archivo (path completo) filename con el nombre modulename (esto puede ser fijo)
