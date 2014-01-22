@@ -1,0 +1,43 @@
+\documentclass[language=spanish]{article}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\pagestyle{fancy}
+\lhead{Arcade La Resistencia\\Documento especificación de HighscoreService\\Versión 1.0 - \today \\}
+\begin{document}
+
+\title{HighscoreService 1.0}
+\author{Jurgen Heysen}
+\date{\today}
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+
+El presente documento busca aclarar el modo de uso y el funcionamiento de HighscoreService.
+
+El servicio se accede mediante la interfaz de servicios cuando el juego declara que lo utilizará, su nombre es HighscoreService y obligatoriamente se deben incluir los parámetros max, que es el número máximo de scores a guardar, y storage, que actualmente no se usa pero se utilizará en una versión posterior. Se recomienda por el momento que su valor sea inicializado en "internal".
+
+\section{Interfaz del servicio}
+
+El servicio provee al juego de los métodos {\tt initialize, register} y {\tt getScores}
+
+\subsection{initialize}
+
+Este método no recibe parámetros de entrada, y debe ser llamado a lo menos una vez para utilizar al servicio. Realiza las tareas de inicialización que no pueden ser realizadas en el constructor, como cargar los datos del almacenamiento.
+
+\subsection{register}
+
+Ese método permite registrar in nuevo puntaje, y lo almacena si está dentro de los mejores. Su firma es {\tt register(score,name)} donde score es el puntaje y name el nombre. Se recomienda que los parámetros sean en formato string o int.
+
+\subsection{getScores}
+
+Permite obtener la lista de máximos puntajes que existe en el momento. No recibe parámetros por lo que su firma es {\tt getScores()} y retorna una tupla del tipo {\tt (score,name)}. Si bien se supone que la lista está ordenada, puede ser buna idea reordenarla explicitamente luego de obtenerla.
+
+\section{Almacenamiento}
+
+El servicio almacena los datos en un archivo XML ubicado en {\tt /services/data/scores/} con el nombre {\tt CODE.xml} donde CODE es el código único del juego. Este parámetro es indicado al servicio al momento de creación del proveedor por parte del Launcher. Si el archivo XML no existe, el servicio crea uno nuevo. 
+
+\end{document}
