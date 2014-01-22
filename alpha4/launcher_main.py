@@ -7,6 +7,7 @@ import system.backend_facade as ABF
 import ui.ArcadeCLI as ArcadeCLI
 import argparse
 import ui.Interfaz as Interfaz
+import tools.logger as logger
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c","--console", action="store_true", help="Uses CLI instead of GUI")
@@ -16,13 +17,15 @@ def LauncherMain():
 	#Comenzamos el inicio de las cosas
 	#Cargamos la configuracion
 	AC.Loadcfg()
+	#Inicializamos el logger
+	log = logger.get_logger("./logs/Launcher ",True,True)
 	#Descubrimos servicios
 	services = SD.discover(AC.servicePath)
     #Ejecutamos scripts de extensiones (si, codigo arbitrario)
 	tools.runparts("./launcherinit.d/")
 	#Obtenemos la lista de juegos
 	lista = GL.GameList(AC.gameList)
-	print(lista) #debug
+	log.log(str(lista)) #debug
 	#Finalizamos con lanzar la interfaz
 	#Primero inicializamos el backend
 	fac = ABF.ArcadeBackendFacade(lista,services)
