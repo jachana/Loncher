@@ -14,7 +14,7 @@ def Loadcfg():
 	global gameDir
 	global gameList
 	try:
-		tree = ET.ElementTree(None,".\Config\ArcadeConfig.xml")
+		tree = ET.ElementTree(None,".\config\ArcadeConfig.xml")
 		root = tree.getroot()
 		#cargamos los parametros
 		for n in root.findall("servicePath"):

@@ -1,0 +1,1 @@
+Carpeta que contiene los logs generados por el Launcher.
