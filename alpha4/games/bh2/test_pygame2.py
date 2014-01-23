@@ -26,8 +26,10 @@ class MiJuego(StartBase.Start):
     def Go(self,services):
         #almacenamos el servicio para uso posterior
         global servicio
+        global logger
         try:
             servicio = services.get_service("HighscoreService")
+            logger = services.get_service("LogService")
         except:
             pass
         main()
@@ -599,10 +601,13 @@ class keyboard():
                 global GOD
                 GOD = not GOD                
                 global player
+                global logger
                 if(GOD):
                     player.dmg = 10
+                    if logger is not None: logger.log("[BH2] God mode ON")
                 else:
                     player.dmg = 0.5
+                    if logger is not None: logger.log("[BH2] God mode OFF")
                     
 
         for keyup in keyups:
@@ -966,7 +971,11 @@ def quitgame(whodied=None):
 
             color = Color(255,255,255,0)
 
-            print(len(scores))
+            global logger
+            if logger is None:
+                print(len(scores))
+            else:
+                logger.log("[BH2/score] List lenght: "+str(len(scores)))
             if(scores[i].isplayer):
                 high = True
                 index = i
