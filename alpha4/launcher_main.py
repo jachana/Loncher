@@ -29,7 +29,7 @@ def LauncherMain():
 	#Finalizamos con lanzar la interfaz
 	#Primero inicializamos el backend
 	fac = ABF.ArcadeBackendFacade(lista,services)
-	#TODO: poner la GUI a andar
+	#poner la GUI a andar
 	gui = None
 	if args.console:
 		gui = ArcadeCLI.ArcadeCLI(fac)

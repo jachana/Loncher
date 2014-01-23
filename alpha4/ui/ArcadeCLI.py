@@ -14,6 +14,8 @@ class ArcadeCLI:
         print("Use run CODE or r CODE to launch a game")
         print("Use help or h to read this again")
         print("Use quit or q to exit")
+        self.listmsg()
+        print(" ")
 
     def helpmsg(self):
         print("Use list or l to get the codes")
