@@ -29,16 +29,16 @@ Los juegos deben exponer un archivo .py con una clase que contenga el método {\
 \subsection{XML}
 
 Los juegos deben exponer un archivo .xml con información relevante sobre ellos.
-El nodo principal debe llamarse \textless Game\textgreater y opcionalmente de argumento puede llevar un string llamado version con el valor "1.0".
-El Titulo del juego va entre las etiquetas \textless Title\textgreater y \textless /Title\textgreater. Es importante agregar un código corto único para el juego entre las etiquetas \textless Code\textgreater y \textless /Code\textgreater.\\
-Las etiquetas \textless Description\textgreater y \textless /Description\textgreater encierran la descripción del juego.\\
-La versión se incluye entre \textless Version\textgreater y \textless /Version\textgreater , se recomienda que sea un entero\\
-La fecha de compilación puede ser añadida con \textless Date\textgreater  y \textless /Date\textgreater \\
-La etiqueta \textless MainClass..\textgreater  es obligatoria y debe llevar como argumentos name con el nombre de la clase que contiene el método Go(...) y path con la ruta relativa a este archivo, extensión incluida.\\
-Se puede incluir la lista de autores mediante una sección \textless Authors\textgreater  finalizada con \textless /Authors\textgreater . Cada autor se individualiza \textless Author name="..."/\textgreater , dónde name es el nombre del autor.\\
-Otro aspecto a considerar es la lista contenida entre \textless Screenshots\textgreater  y \textless /Screenshots\textgreater  para incluir las screenshots del juego que se mostraran en el Launcher. cada una se indica con la etiqueta \textless Screenshot src="..."/\textgreater  donde src es el path a la screenshot.\\
-La lista denotada por \textless Services\textgreater y \textless /Services\textgreater  indica los servicios que solicita el juego al Launcher, cada servicio se solicita mediante \textless Service name="..." .../\textgreater  donde name es el nombre del servicio solicitado, además se deben incluir los parámetros requeridos por el servicio según su propio estándar.\\
-Adicionalmente se puede crear una lista denotada por \textless AdditionalData\textgreater  y \textless /AdditionalData\textgreater  para incluir datos adicionales. No hay especificaciones sobre los contenidos de esta lista.\\ 
+El elemento principal debe llamarse Game y opcionalmente de argumento puede llevar un string llamado version con el valor "1.0".
+El Titulo del juego va en el elemento {\tt Title} como contenido. Es importante agregar un código corto único para el juego como contenido del elemento {\tt Code}\\
+El elemento {\tt Description} tiene como contenido la descipción del juego que se mostrará en la GUI.\\
+La versión se incluye como contenido de {\tt Version} , se recomienda que sea un entero\\
+La fecha de compilación puede ser añadida con un elemento {\tt Date} \\
+El elemento {\tt MainClass} es obligatorio y debe llevar como atributos name con el nombre de la clase que contiene el método {\tt Go(...)} y path con la ruta relativa a este archivo, extensión incluida.\\
+Se puede incluir la lista de autores mediante un elemento {\tt Authors} que contenga una lista de elementos {\tt Author}, con atributo {\tt name} para el nombre del autor cada uno .\\
+Otro aspecto a considerar es la lista contenida en {\tt Screenshots}, para incluir las screenshots del juego que se mostraran en el Launcher. Cada una se indica mediante un elemento {\tt Screenshot} con un atributo {\tt src} que indica el path a la imagen.\\
+La lista denotada por {\tt Services} indica los servicios que solicita el juego al Launcher, cada servicio se solicita mediante un elemento {\tt Service} con atributo {\tt name} que es el nombre del servicio solicitado, además se deben incluir los parámetros requeridos por el servicio según su propio estándar.\\
+Adicionalmente se puede crear una lista denotada por {\tt AdditionalData}  para incluir datos adicionales. No hay especificaciones sobre los contenidos de esta lista.\\ 
 A continuación se presenta una tabla resumen sobre la información que debe contener el xml:
 
 \input{XmlTable.tex}

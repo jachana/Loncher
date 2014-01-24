@@ -2,7 +2,7 @@
 \contentsline {section}{\numberline {2}Est\IeC {\'a}ndar}{3}
 \contentsline {subsection}{\numberline {2.1}C\IeC {\'o}digo}{3}
 \contentsline {subsection}{\numberline {2.2}XML}{3}
-\contentsline {section}{\numberline {3}Servicios}{4}
+\contentsline {section}{\numberline {3}Servicios}{3}
 \contentsline {subsection}{\numberline {3.1}Clase ArcadeServiceInterface}{4}
 \contentsline {subsubsection}{\numberline {3.1.1}M\IeC {\'e}todo getServices()}{4}
 \contentsline {subsubsection}{\numberline {3.1.2}M\IeC {\'e}todo getService(servicio)}{4}
