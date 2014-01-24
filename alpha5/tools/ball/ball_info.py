@@ -35,3 +35,18 @@ class BallInfo():
 
 	def get_pkgver(self):
 		return self.pkgver
+
+	def set_balltype(self,value):
+		self.ballltype = value
+
+	def set_authname(self,value):
+		self.authname = value
+
+	def set_pkgname(self,value):
+		self.pkgname = value
+
+	def set_pkgver(self,value):
+		self.pkgver = value
+
+	def set_dependencies(self,value):
+		self.dependencies = value
