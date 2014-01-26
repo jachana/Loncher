@@ -29,7 +29,7 @@ def install_ball(path):
 		try:
 			imstr = "install."+str(b_info.get_balltype)
 			eval("import imstr")
-			return_val = eval("imstr.install(b)") #Solicitamos al instalador que haga la pega
+			return_val = eval("imstr.install(b,b_info)") #Solicitamos al instalador que haga la pega
 		except Exception:
 			#Algo salio mal, probablemente no existe el instalador de ese tipo
 			log_.log("[BallInstall/install_ball] Exception during install, aborted. Is balltype standard or is the installHandler installed?")

@@ -50,3 +50,6 @@ class BallInfo():
 
 	def set_dependencies(self,value):
 		self.dependencies = value
+
+	def get_specific(self,value):
+		pass
