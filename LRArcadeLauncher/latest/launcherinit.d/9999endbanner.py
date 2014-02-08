@@ -1,1 +1,0 @@
-print("Finalizado init.d")

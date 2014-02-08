@@ -1,8 +1,0 @@
-\contentsline {section}{\numberline {1}Introducci\IeC {\'o}n}{3}
-\contentsline {section}{\numberline {2}Modelo de funcionamiento}{3}
-\contentsline {section}{\numberline {3}Requerimientos}{3}
-\contentsline {subsection}{\numberline {3.1}Estructura del software}{3}
-\contentsline {subsection}{\numberline {3.2}M\IeC {\'e}todos requeridos}{3}
-\contentsline {subsubsection}{\numberline {3.2.1}register()}{3}
-\contentsline {subsubsection}{\numberline {3.2.2}factory(....)}{3}
-\contentsline {section}{\numberline {4}Instalaci\IeC {\'o}n de servicios}{4}
