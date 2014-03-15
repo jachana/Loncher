@@ -64,6 +64,7 @@ class ArcadeGUIEx:
 		self._gl.selection_set(0)
 		self._gl.activate(0)
 		self._gl.focus_set()
+		self._gl.config(height = '27')
 		self._gl.grid(row=0, column=1) #draw list
 
 		#Screenshot Area
