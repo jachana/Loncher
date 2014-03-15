@@ -4,7 +4,8 @@
 	<Code>BHO</Code>
 	<Version>101</Version>
 	<Date>23-01-2014</Date>
-	<Description>LAUNCHER DEMO: ¡Esquiva las balas y destruye al robot! Utiliza el servicio de Highscores!</Description>
+	<Description>LAUNCHER DEMO 2: ¡Esquiva las balas y destruye al robot!
+	 Utiliza el servicio de Highscores!</Description>
 	<MainClass name="MiJuego" file="./games/bh2/test_pygame2.py"/>
 	<Authors>
 		<Author name="Vicente Errázuriz"/>

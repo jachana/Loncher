@@ -4,6 +4,7 @@ import system.game_man.gameinfo as GI
 import system.backend_facade as ABF
 from PIL import ImageTk, Image
 import tools
+import random
 
 #Constants
 
@@ -50,7 +51,7 @@ class ArcadeGUIEx:
 		self._log.log("[GUI/Init] Setting up gamelist")
 		self._gl = Listbox(self._winroot) #Widget
 		self._gl.pack() #Draw it
-		self._gl.bind("<<ListBoxSelect>>",self.on_list_select) #selection update method binding
+		self._gl.bind("<<ListboxSelect>>",self.on_list_select) #selection update method binding
 		self._gl.bind("<Return>",self.on_list_return) #selection method binding
 		self._log.log("[GUI/Init] Beggining GameList scanning")
 		for game in self._back.get_gamelist().get_list():
@@ -71,12 +72,14 @@ class ArcadeGUIEx:
 		self._gl.grid(row=0, column=1) #draw list
 
 		#Screenshot Area
-		#TODO: Draw Screenshots
+		self._log.log("[GUI/Init] Setting up screenshot area")
+		self._sswidget = Label(self._winroot)
+		self._sswidget.grid(row = 0, column = 3)
 
 		#Game Description
 		self._log.log("[GUI/Init] Setting up description zone")
 		self._gamedescrp = Label(self._winroot, text = STR_NODESC) #WWidget
-		self._gamedescrp.grid(row = 2, column = 2, columnspan = 3, sticky = W+E+N+S, padx = 5, pady = 5) #Draw it, note, we'll update it's text
+		self._gamedescrp.grid(row = 2, column = 2, columnspan = 3, sticky = W+E+N+S, padx = 5, pady = 5,rowspan = 5) #Draw it, note, we'll update it's text
 
 		#Now we have finished makig the screen, so we'll report and force update the info
 		self._log.log("[GUI/Init] Init process finished.")
@@ -98,7 +101,19 @@ class ArcadeGUIEx:
 		self._gamedescrp.configure(text = self._gamedict[name].getDescripcion())
 		#Reporting
 		self._log.log("[GUI/list_select] Selected game "+name)
-		#TODO: Update Screenshots
+		#Update Screenshots
+		sslist = self._gamedict[name].getScreenshots()
+		ssimag = None
+		if len(sslist) > 0:
+			num = random.randint(0,len(sslist)-1)
+			self._log.log("[GUI/list_select] Using screenshot "+sslist[num])
+			ssimag = Image.open(sslist[0])
+		else:
+			self._log.log("[GUI/list_select] No screenshots found for display")
+			ssimag = Image.open(FL_NOSS)
+		#Now that we have file handler, we create a ImageTk and draw
+		ss = ImageTk.PhotoImage(ssimag)
+		self._sswidget.configure(image = ss)
 
 	def on_list_return(self, evt):
 		"""Handles return key hit on gamelist to load a game.
