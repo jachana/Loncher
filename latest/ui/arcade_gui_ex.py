@@ -114,6 +114,7 @@ class ArcadeGUIEx:
 		#Now that we have file handler, we create a ImageTk and draw
 		ss = ImageTk.PhotoImage(ssimag)
 		self._sswidget.configure(image = ss)
+		self._sswidget.image = ss
 
 	def on_list_return(self, evt):
 		"""Handles return key hit on gamelist to load a game.
