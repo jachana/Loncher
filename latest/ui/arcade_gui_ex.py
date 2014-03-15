@@ -10,6 +10,9 @@ import tools
 STR_NODESC = "No description Available" #No description string
 STR_WINTITLE = "Arcade Launcher 1.0.0" #Window Title
 
+W_MINHEIGHT = 1024
+W_MINLENGHT = 768
+
 FL_BG = "./ui/res/bg.png" #Backgrund image location
 FL_NOSS = "./ui/res/noss.png" #No Screenshot Available Image
 
@@ -31,7 +34,7 @@ class ArcadeGUIEx:
 		#Window Definiton
 		self._log.log("[GUI/Init] Init: Window Definition")
 		self._winroot.title(STR_WINTITLE)
-		self._winroot.minsize(1024,768)
+		self._winroot.minsize(W_MINHEIGHT,W_MINLENGHT)
 		self._winroot.overrideredirect(True)
 		self._winroot.geometry("{0}x{1}+0+0".format(self._winroot.winfo_screenwidth(), self._winroot.winfo_screenheight()))
 		#TODO: Window name, size, etc.
@@ -41,7 +44,7 @@ class ArcadeGUIEx:
 		self._bgfile = Image.open(FL_BG) #background image reference
 		self._background = ImageTk.PhotoImage(self._bgfile) #background image usable reference
 		self._bg = Label(self._winroot, image = self._background) #Background label
-		self._bg.place(x=0, y=0, relwidth=1, relheight=1) #Draw the background
+		self._bg.place(x=0, y=0, relwidth=1.0, relheight=1.0, anchor = NW) #Draw the background
 
 		#Gamelist
 		self._log.log("[GUI/Init] Setting up gamelist")
