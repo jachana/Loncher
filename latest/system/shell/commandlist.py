@@ -15,7 +15,7 @@ class CommandList:
 
 		#copy/paste from service_discovery.. refactor?
 		oldpath = os.getcwd() #avoiding trouble
-		path = "./commands/"
+		path = "./system/shell/commands/"
         os.chdir(path)
         #look only in current dir
         for files in os.listdir("."):
