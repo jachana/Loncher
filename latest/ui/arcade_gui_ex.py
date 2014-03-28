@@ -117,8 +117,8 @@ class ArcadeGUIEx:
 		ssimag = None
 		if len(sslist) > 0:
 			num = random.randint(0,len(sslist)-1)
-			self._log.log("[GUI/list_select] Using screenshot "+sslist[num])
-			ssimag = Image.open(sslist[0])
+			self._log.log("[GUI/list_select] Using screenshot "+sslist[num]+" out of "+str(len(sslist)-1)+" Available.")
+			ssimag = Image.open(sslist[num])
 		else:
 			self._log.log("[GUI/list_select] No screenshots found for display")
 			ssimag = Image.open(FL_NOSS)
