@@ -5,14 +5,15 @@ import system.backend_facade as ABF
 from PIL import ImageTk, Image
 import tools
 import random
+import math
 
 #Constants
 
 STR_NODESC = "No description Available" #No description string
 STR_WINTITLE = "Arcade Launcher 1.0.0" #Window Title
 
-W_MINHEIGHT = 1024
-W_MINLENGHT = 768
+W_MINWIDTH = 1024
+W_MINHEIGHT = 768
 
 FL_BG = "./ui/res/bg.png" #Backgrund image location
 FL_NOSS = "./ui/res/noss.png" #No Screenshot Available Image
@@ -35,7 +36,7 @@ class ArcadeGUIEx:
 		#Window Definiton
 		self._log.log("[GUI/Init] Init: Window Definition")
 		self._winroot.title(STR_WINTITLE)
-		self._winroot.minsize(W_MINHEIGHT,W_MINLENGHT)
+		self._winroot.minsize(W_MINWIDTH,W_MINHEIGHT)
 		self._winroot.overrideredirect(True)
 		self._winroot.geometry("{0}x{1}+0+0".format(self._winroot.winfo_screenwidth(), self._winroot.winfo_screenheight()))
 		#TODO: Window name, size, etc.
@@ -44,8 +45,18 @@ class ArcadeGUIEx:
 		self._log.log("[GUI/Init] Setting up background")
 		self._bgfile = Image.open(FL_BG) #background image reference
 		self._background = ImageTk.PhotoImage(self._bgfile) #background image usable reference
-		self._bg = Label(self._winroot, image = self._background) #Background label
-		self._bg.place(x=0, y=0, relwidth=1.0, relheight=1.0, anchor = NW) #Draw the background
+		
+                widthratio = math.ceil(self._winroot.winfo_screenwidth() / self._bgfile.size[0])+1 #Screen/Image Width ratio, needed for tessellation.
+                heightratio = math.ceil(self._winroot.winfo_screenheight() / self._bgfile.size[1])+1 #Screen/Image Height ratio, needed for tessellation.
+
+                self._bg = [] #Background labels
+                for s in range (int(widthratio*heightratio)):
+                        self._bg.append(Label(self._winroot, image = self._background, borderwidth = 0)) 
+                
+                for j in range(int(heightratio)):
+                        for i in range(int(widthratio)):
+                                #Tessellation
+                                self._bg[int(i+j*widthratio)].place(x=i*(self._bgfile.size[0]),y=j*(self._bgfile.size[1]),anchor = NW) #Draw each piece of the background
 
 		#Gamelist
 		self._log.log("[GUI/Init] Setting up gamelist")
