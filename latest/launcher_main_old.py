@@ -6,7 +6,7 @@ import system.launcher_config as AC
 import system.backend_facade as ABF
 import ui.ArcadeCLI as ArcadeCLI
 import argparse
-import ui.arcade_gui_ex as Interfaz
+import ui.Interfaz as Interfaz
 import tools.logger as logger
 
 parser = argparse.ArgumentParser()
@@ -34,7 +34,7 @@ def LauncherMain():
 	if args.console:
 		gui = ArcadeCLI.ArcadeCLI(fac)
 	else:
-		gui = Interfaz.ArcadeGUIEx(fac)
+		gui = Interfaz.ArcadeGUI(fac)
 	gui.go()
 
 if __name__== "__main__":
