@@ -194,7 +194,7 @@ class ArcadeGUIEx:
 				self.joy_select(xval)
 				self.joy_select(yval)
 			if event.type == pygame.JOYAXISMOTION:
-				val = event.value
+				val = -1*event.value
 				self._log.log("[GUI/joy_tick] Joystick axis moved with value "+str(val))
 				self.joy_select(val)
 		#we ask tkinter to re-schedule the event
@@ -204,7 +204,20 @@ class ArcadeGUIEx:
 		"""Makes the selection on the Listbox
 		"""
 
+		baseidx = self._gl.index(ACTIVE)
 		if value > 0.5:
 			self._log.log("[GUI/joy_select] Selecting up")
+			if baseidx != 0:
+				self._gl.see(baseidx-1)
+				self._gl.selection_set(baseidx-1)
+				self._gl.activate(baseidx-1)
+				self._gl.selection_clear(baseidx)
+
 		if value < -0.5:
 			self._log.log("[GUI/joy_select] Selecting down")
+			if baseidx != self._gl.index(END):
+				self._gl.see(baseidx+1)
+				self._gl.selection_set(baseidx+1)
+				self._gl.activate(baseidx+1)
+				self._gl.selection_clear(baseidx)
+		self.on_list_select(None) #force update
