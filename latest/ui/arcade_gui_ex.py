@@ -6,6 +6,9 @@ from PIL import ImageTk, Image
 import tools
 import random
 import math
+import pygame.joystick
+import pygame.event
+import pygame
 
 #Constants
 
@@ -60,7 +63,10 @@ class ArcadeGUIEx:
 
 		#Gamelist
 		self._log.log("[GUI/Init] Setting up gamelist")
+		#scrollbar = Scrollbar(self._winroot, orient=VERTICAL) #So we can see if there is more
 		self._gl = Listbox(self._winroot) #Widget
+		#scrollbar.config(command=self._gl.yview)
+		#scrollbar.pack(side=RIGHT, fill=Y)
 		self._gl.pack() #Draw it
 		self._gl.bind("<<ListboxSelect>>",self.on_list_select) #selection update method binding
 		self._gl.bind("<Return>",self.on_list_return) #selection method binding
@@ -95,6 +101,34 @@ class ArcadeGUIEx:
 		#Now we have finished makig the screen, so we'll report and force update the info
 		self._log.log("[GUI/Init] Init process finished.")
 		self.on_list_select(None) #Force update
+
+		#Joystick support section
+		self._log.log("[GUI/Init] Initiating Joystick compatibility module")
+		self.joystickOk = False
+
+		##Gotten from http://forums.majorgeeks.com/showthread.php?t=254317
+		#Initialize joystick module
+		pygame.joystick.init()
+		pygame.init()
+		# Allow multiple joysticks
+		self.joy = []
+		# Declare axis displacement vector for an Xbox 360 Controller
+		self.displacement = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+		# Look for a connected joystick
+		if pygame.joystick.get_count() > 0:
+			self._log.log("[GUI/Init] "+str(pygame.joystick.get_count())+" Joysticks found")
+			self.joystickOk = True
+			numJoys = pygame.joystick.get_count()
+			for i in range(numJoys):
+				myJoy = pygame.joystick.Joystick(i)
+				myJoy.init()
+				self.joy.append(myJoy)
+				self._log.log("[GUI/Init] Joytick"+str(i)+": "+self.joy[i].get_name())
+		else:
+			self._log.log("[GUI/Init] No Joystick detected")
+		self._log.log("[GUI/Init] Joystick Initialization ended with result "+str(self.joystickOk))
+		#Finally, we register for polling
+		self._winroot.after(100,self.on_joy_tick)
 
 	def go(self):
 		"""Requiered method for init script.
@@ -141,6 +175,36 @@ class ArcadeGUIEx:
 			self._log.log("[GUI/list_return] Launching game "+self._gl.get(ACTIVE)+" as "+code)
 			self._back.load_game(code)
 
+	def on_joy_tick(self):
+		"""Processes joytick information to update selection.
+		"""
 
+		#We ask the pygame event pump for events
+		for event in pygame.event.get():
+			if event.type == pygame.JOYBUTTONDOWN:
+				self._log.log("[GUI/joy_tick] Joystick button pressed.")
+				self.on_list_return(None) #Launch selected
+			if event.type == pygame.JOYBUTTONUP:
+				self._log.log("[GUI/joy_tick] Joystick button released.")
+			if event.type == pygame.JOYHATMOTION:
+				val = event.value
+				xval = val[0]
+				yval = val[1]
+				self._log.log("[GUI/joy_tick] Joystick Hat moved with x="+str(xval)+"and y="+str(yval))
+				self.joy_select(xval)
+				self.joy_select(yval)
+			if event.type == pygame.JOYAXISMOTION:
+				val = event.value
+				self._log.log("[GUI/joy_tick] Joystick axis moved with value "+str(val))
+				self.joy_select(val)
+		#we ask tkinter to re-schedule the event
+		self._winroot.after(100,self.on_joy_tick)
 
+	def joy_select(self,value):
+		"""Makes the selection on the Listbox
+		"""
 
+		if value > 0.5:
+			self._log.log("[GUI/joy_select] Selecting up")
+		if value < -0.5:
+			self._log.log("[GUI/joy_select] Selecting down")
