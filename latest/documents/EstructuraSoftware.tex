@@ -1,0 +1,86 @@
+\documentclass[language=spanish]{article}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\pagestyle{fancy}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{booktabs}
+\lhead{Arcade La Resistencia\\Documento estructura de software\\Versión 1.0.0 - \today \\}
+\begin{document}
+
+\title{Estructura de software Launcher 1.0.0}
+\author{Jurgen Heysen}
+\date{\today}
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+
+Este documento busca indicar la estructura básica del software al momento de la release de esta versión, así como de informar a los futuros encargados de darle mantenimiento sobre los problemas conocidos e ideas inconclusas.
+
+\section{Estructura}
+
+El software en si se compone de distintos módulos que se comunican entre sí buscando tener el mínimo acoplamiento posible. Estos módulos son:
+
+\begin{enumerate}
+	\item User Interface
+	\item Utilidades
+	\item Game Management
+	\item Service Management
+\end{enumerate}
+
+Los módulos de Game Management y Service Management se unen en la Facade del Backend, pero pueden, con mínimas modificaciones, funcionar el uno sin el otro.
+
+\subsection{User Interface}
+
+Esta parte del software tiene relación con la interfaz que se muestra al usuario. No tiene mucha relación son el núcleo del launcher más que lo que extrae desde la facade del sistema.\\
+Actualmente, se tienen dos interfaces:
+
+\begin{enumerate}
+	\item Graphic User Interface
+	\item Command Line Interface
+\end{enumerate}
+
+La GUI se ha programado usando TkInter y Pillow para el manejo de imágenes, pygame para el manejo de joysticks.\\
+La línea de comandos se ha programado sólo usando python puro.
+
+Actualmente, la interfaz es escojida por el script de inicio. Hacia el futuro se pensaba que era posible que las interfaces pudieran ser tan complejas como se necesitara, siendo piezas de software casi independientes del núcleo del Launcher, asi como poder tener alguna forma centralizada en el módulo que escogiese la interfaz a utilizar, y permitiera instalar más.
+Así mismo, la GUI actual no se relaciona con información proveniente de los servicios y las posiciones de los elementos son casi fijas, lo que pudiera ser de interés cambiar.
+
+\subsection{Utilidades}
+
+Esta zona del software está pensada básicamente para pequeñas funciones que se utilicen mucho y que puedan ser reutilizadas por diversos módulos, como el manejo de juegos y las interfaces de usuario.\\
+Actualmente, se cuenta con run\_parts que ejecuta todos los scripts que encuentre en una carpeta y rel\_prep que elimina todos los .pyc en el arbol de directorios del Launcher.
+En el futuro, run\_parts puede ser revisado para asegurarse que es lo más general posible.
+
+\subsection{Game Management}
+
+Parte principal del Launcher, es el módulo encargado de detectar y ejecutar los juegos registrados. Contiene objetos para representar la información de un juego (parsing de GameInfo.xml), mantención de la lista de juegos y el codigo para ejecutar el juego en un Thread separado, en este caso un Process separado.\\
+
+Si en un futuro se piensa cambiar el estándar de información de juegos, se deberá alterar este módulo. No olvidar que debería considerarse retrocompatibilidad con la versión actual del estándar, por lo que juegos que utilicen nuevas versiones del estándar deberán indicarlo de alguna forma.
+
+\subsection{Service Management}
+
+Este módulo contiene todo el código orientado a descubrir, inicializar y administrar los accesos a los servicios instalados. Cabe mencionar que el esquema actual de servicios hace que estén 100\% desacoplados del software, ya que son descubiertos en tiempo de ejecución.\\
+
+Los desafíos futuros de este módulo son el mejorar el manejo de permisos para el acceso a los servicios y un desafio de refactoring por similitudes de partes de su código con run\_parts.
+
+\section{Ideas Inconclusas}
+
+Al momento de la liberación de esta release, quedaron algunas ideas inconclusas que pueden ser interesantes de implementar:
+
+\subsection{Sistema Ball}
+
+Este sistema estaria encargado de la administración de paquetes del Launcher, no sólo juegos, si no que también de servicios y otros add-ons, posiblemente permitiendo actualizaciones por internet y actualizaciones automáticas, además de búsqueda de paquetes para su descarga e instalación. Se puede pensar en algo como apt-get y dpkg, la idea era que los paquetes estuvieran basados en archivos zip.
+
+\subsection{Shell}
+
+Este componente sería la columna vertebral del Launcher reestructurandolo completamente, ya que todo giraría en torno a él, por ejemplo, las interfaces ya no se comunicarian directamente con el módulo de administración de juegos si no que entregarian comandos a este componente, y este, con consideraciones de permisos de acceso y similares mediaria la respuesta y comunicación. Se puede pensar en algo como bash en linux.
+
+\subsection{Eventos}
+
+La posibilidad de definir un módulo encargado de eventos de forma centralizada, de tal suerte que cualquier módulo podria solicitar la creación de un evento y suscribirse a otros, cosa que cuando se gatillara el evento, pudiera reaccionar a él. Esto es de especial utilidad en las Interfaces de usuario ya que permitiria la adición simple de add-ons.
+
+\end{document}
