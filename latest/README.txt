@@ -1,4 +1,4 @@
-Arcade Launcher La Resistencia
+﻿Arcade Launcher La Resistencia
 
 En memoria de Ricardo Aldana Rameau (1993-2014).
 
@@ -15,7 +15,7 @@ Para fines comerciales, enviar un mail a jdheysen@uc.cl para negociar los derech
 
 Dependencias:
 El software ha sido elaborado con Python 2.7.5 y es compatible con todas las versiones de Python 2.7, adicionalmente depende de:
--Pygame 2.3.6
+-Pygame 1.9.6
 -Pillow 2.2.2
 
 Las versiones indicadas son las utilizadas al momento del desarrollo, es posible que otras versiones funcionen pero no se garantiza.
