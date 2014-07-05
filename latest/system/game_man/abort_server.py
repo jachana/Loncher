@@ -16,18 +16,18 @@ class AbortServer:
                         self.s.bind((host, port))        # Bind to the port
                 except:
                         pass
-                start_new_thread(sv_main,(gHandle,))
+                start_new_thread(self.sv_main,(gHandle,))
 
         def sv_main(self,gHandle):
                 """Metodo principal del servidor.
                 """
-                s.listen(1)
+                self.s.listen(1)
                 while not KillFlag:
                         #wait to accept a connection - blocking call
-                        conn, addr = s.accept()
+                        conn, addr = self.s.accept()
                         print 'Connected with ' + addr[0] + ':' + str(addr[1])
                         #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-                        start_new_thread(clientthread ,(conn,))
+                        start_new_thread(self.clientthread ,(conn,))
 
         def kill(self):
                 """Metodo que aborta el servidor.
