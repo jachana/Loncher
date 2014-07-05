@@ -8,6 +8,7 @@ def AbortServer:
 
 	def __init__(self,gHandle):
 		self.KillFlag = False
+		self.gHandle = gHandle			 # Creamos campo para Handle del proceso en curso.
 		self.s = socket.socket()         # Create a socket object
 		self.host = socket.gethostname() # Get local machine name
 		self.port = 12345                # Reserve a port for your service.
