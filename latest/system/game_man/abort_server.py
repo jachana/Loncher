@@ -48,8 +48,11 @@ class AbortServer:
                         #Receiving from client
                         data = conn.recv(1024)
                         reply = 'OK...' + data
-                        if data == "abort":
-                                self.gHandle.abort()
+                        if data == "a":
+                                try:
+                                        self.gHandle.abort()
+                                except:
+                                        pass
                                 break
                         if not data:
                                 break
