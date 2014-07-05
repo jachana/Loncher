@@ -11,18 +11,22 @@ class AbortServer:
                 self.gHandle = gHandle                   # Creamos campo para Handle del proceso en curso.
                 self.s = socket.socket()         # Create a socket object
                 self.host = socket.gethostname() # Get local machine name
-                self.port = 12345                # Reserve a port for your service.
+                self.port = 45000                # Reserve a port for your service.
                 try:
-                        self.s.bind((host, port))        # Bind to the port
+                        self.s.bind((self.host, self.port))        # Bind to the port
+                        print 'Bound to ' + self.host + ':' + str(self.port)
                 except:
-                        pass
+                        print 'Exception during port binding'
+                        print 'Host: ' + self.host
+                        print 'Port: ' + str(self.port)
                 start_new_thread(self.sv_main,(gHandle,))
 
         def sv_main(self,gHandle):
                 """Metodo principal del servidor.
                 """
-                self.s.listen(1)
-                while not KillFlag:
+                self.s.listen(5)
+                while not self.KillFlag:
+                        print 'Accepting Connections...'
                         #wait to accept a connection - blocking call
                         conn, addr = self.s.accept()
                         print 'Connected with ' + addr[0] + ':' + str(addr[1])
@@ -40,12 +44,13 @@ class AbortServer:
         #Sending message to connected client
                 conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
                 #infinite loop so that function do not terminate and thread do not end.
-                while True:
+                while not self.KillFlag:
                         #Receiving from client
                         data = conn.recv(1024)
                         reply = 'OK...' + data
                         if data == "abort":
                                 self.gHandle.abort()
+                                break
                         if not data:
                                 break
                         conn.sendall(reply)
