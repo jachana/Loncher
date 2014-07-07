@@ -2,13 +2,22 @@ import socket
 import sys
 from thread import *
 
-class AbortServer:
+class _Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(_Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+class Singleton(_Singleton('SingletonMeta', (object,), {})): pass
+
+class abort_server(Singleton):
         """Objeto que modela el servidor de aborto de juego en curso
         """
 
         def __init__(self,gHandle):
                 self.KillFlag = False
-                self.gHandle = gHandle                   # Creamos campo para Handle del proceso en curso.
+                self.gHandle = gHandle           # Creamos campo para Handle del proceso en curso.
                 self.s = socket.socket()         # Create a socket object
                 self.host = socket.gethostname() # Get local machine name
                 self.port = 45000                # Reserve a port for your service.
@@ -39,6 +48,7 @@ class AbortServer:
 
                 self.KillFlag = True
                 self.s.close()
+                print("Server successfully killed")
 
         def clientthread(self,conn):
         #Sending message to connected client
@@ -50,12 +60,17 @@ class AbortServer:
                         reply = 'OK...' + data
                         if data == "a":
                                 try:
-                                        self.gHandle.abort()
+                                        self.gHandle.terminate()
+                                        print("Process terminated by net signal")
                                 except:
-                                        pass
+                                        print("Exception during Handle Abort signaling")
                                 break
                         if not data:
                                 break
                         conn.sendall(reply)
                 #came out of loop
                 conn.close()
+
+#Testing code
+if __name__ == "__main__":
+        svr = abort_server(None)

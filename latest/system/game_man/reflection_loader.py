@@ -3,6 +3,7 @@ import multiprocessing
 import tools
 import os
 import sys
+import abort_server
 
 def launch_game(filename,classname,modulename,serviceinterface):
         """Lanza un juego en el proceso actual.
@@ -39,5 +40,11 @@ def launch_game_mt(filename,classname,modulename,serviceinterface):
         nproc.daemon = False
         #Comenzamos su ejecucion
         nproc.start()
+        #Entregamos handle de proceso a abort server
+        srv = abort_server.abort_server(nproc)
+        srv.gHandle = nproc
         #Esperamos que termine
         nproc.join()
+        #Limpiamos handle del servidor
+        srv.gHandle = None
+        srv.kill()
