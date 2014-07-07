@@ -3,4 +3,5 @@
 	<servicePath dir="./services"/>
 	<gameDir dir="./games"/>
 	<gameList src="./config/GameList_example.xml"/>
+	<serverPort port="45000"/>
 </Config>

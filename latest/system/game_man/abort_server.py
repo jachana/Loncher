@@ -1,6 +1,7 @@
 import socket
 import sys
 from thread import *
+import system.launcher_config as AC
 
 class _Singleton(type):
     _instances = {}
@@ -20,7 +21,7 @@ class abort_server(Singleton):
                 self.gHandle = gHandle           # Creamos campo para Handle del proceso en curso.
                 self.s = socket.socket()         # Create a socket object
                 self.host = socket.gethostname() # Get local machine name
-                self.port = 45000                # Reserve a port for your service.
+                self.port = 45000        # Reserve a port for your service.
                 try:
                         self.s.bind((self.host, self.port))        # Bind to the port
                         print 'Bound to ' + self.host + ':' + str(self.port)
